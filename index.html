@@ -5,129 +5,672 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Renuevo Trucks | Sistema de Proformas</title>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f3f6fa;color:#263449}
-.app{display:flex;min-height:100vh}
-.sidebar{width:250px;background:#172536;color:white;padding:25px 17px;flex-shrink:0}
-.logo{font-size:21px;font-weight:bold;letter-spacing:1px;margin-bottom:5px}
-.logo span{color:#36a9e8}
-.subtitle{font-size:10px;color:#aab8c7;letter-spacing:2px;margin-bottom:35px}
-.menu-title{font-size:10px;color:#8495a8;margin:25px 10px 12px;letter-spacing:1px}
-.menu-item{padding:13px 12px;border-radius:7px;margin:5px 0;color:#c5d0dc;font-size:13px;cursor:pointer}
-.menu-item.active{background:#24425e;color:white;border-left:3px solid #35a9e8}
-.menu-item:hover{background:#263c53}
-.main{flex:1;min-width:0}
-.topbar{height:70px;background:white;border-bottom:1px solid #e5eaf0;display:flex;align-items:center;justify-content:space-between;padding:0 30px}
-.topbar small{color:#8592a2}
-.user{background:#e8f3fc;color:#1976b9;padding:10px 14px;border-radius:30px;font-size:12px}
-.content{padding:30px;max-width:1300px;margin:auto}
-.welcome{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;gap:15px}
-h1{font-size:25px;margin-bottom:7px}
-.welcome p{font-size:13px;color:#8592a2}
-button{border:0;border-radius:7px;padding:12px 17px;background:#1688cf;color:white;font-weight:bold;cursor:pointer}
-button:hover{background:#0872b4}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:27px}
-.card{background:white;padding:22px;border:1px solid #e8edf2;border-radius:10px}
-.card-label{font-size:12px;color:#8995a3;margin-bottom:15px}
-.card-value{font-size:26px;font-weight:bold;color:#20354b}
-.card-note{font-size:11px;color:#8b99a8;margin-top:8px}
-.panel{background:white;border:1px solid #e8edf2;border-radius:10px;padding:23px;margin-bottom:20px}
-.panel h2{font-size:16px;margin-bottom:18px}
-.quick{display:grid;grid-template-columns:repeat(2,1fr);gap:15px}
-.quick-item{padding:18px;border:1px solid #e7edf3;border-radius:8px;cursor:pointer}
-.quick-item:hover{border-color:#1688cf;background:#f7fbff}
-.quick-item strong{font-size:14px}
-.quick-item p{font-size:12px;color:#8794a3;margin-top:7px}
-.status{font-size:12px;color:#8794a3;text-align:center;padding:20px}
-@media(max-width:750px){
-.sidebar{width:190px}
-.content{padding:18px}
-.cards{grid-template-columns:1fr}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-@media(max-width:520px){
-.app{display:block}
-.sidebar{width:100%;padding:16px}
-.subtitle{margin-bottom:10px}
-.menu-title{margin:12px 5px}
-.topbar{padding:0 15px}
-.content{padding:15px}
-.welcome{align-items:flex-start;flex-direction:column}
-.quick{grid-template-columns:1fr}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f3f6fa;
+  color: #263449;
 }
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* MENU DE COMPUTADORA */
+
+.sidebar {
+  width: 250px;
+  background: #172536;
+  color: white;
+  padding: 25px 17px;
+  flex-shrink: 0;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 5px;
+}
+
+.logo span {
+  color: #36a9e8;
+}
+
+.subtitle {
+  font-size: 10px;
+  color: #aab8c7;
+  letter-spacing: 2px;
+  margin-bottom: 35px;
+}
+
+.menu-title {
+  font-size: 10px;
+  color: #8495a8;
+  margin: 25px 10px 12px;
+  letter-spacing: 1px;
+}
+
+.menu-item {
+  padding: 13px 12px;
+  border-radius: 7px;
+  margin: 5px 0;
+  color: #c5d0dc;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.menu-item.active {
+  background: #24425e;
+  color: white;
+  border-left: 3px solid #35a9e8;
+}
+
+.menu-item:hover {
+  background: #263c53;
+}
+
+/* CONTENIDO */
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid #e5eaf0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+}
+
+.topbar small {
+  color: #8592a2;
+}
+
+.user {
+  background: #e8f3fc;
+  color: #1976b9;
+  padding: 10px 14px;
+  border-radius: 30px;
+  font-size: 12px;
+}
+
+.content {
+  padding: 30px;
+  max-width: 1300px;
+  margin: auto;
+}
+
+.welcome {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  gap: 15px;
+}
+
+h1 {
+  font-size: 25px;
+  margin-bottom: 7px;
+}
+
+.welcome p {
+  font-size: 13px;
+  color: #8592a2;
+}
+
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 17px;
+  background: #1688cf;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #0872b4;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 27px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border: 1px solid #e8edf2;
+  border-radius: 10px;
+}
+
+.card-label {
+  font-size: 12px;
+  color: #8995a3;
+  margin-bottom: 15px;
+}
+
+.card-value {
+  font-size: 26px;
+  font-weight: bold;
+  color: #20354b;
+}
+
+.card-note {
+  font-size: 11px;
+  color: #8b99a8;
+  margin-top: 8px;
+}
+
+.panel {
+  background: white;
+  border: 1px solid #e8edf2;
+  border-radius: 10px;
+  padding: 23px;
+  margin-bottom: 20px;
+}
+
+.panel h2 {
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.quick {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.quick-item {
+  padding: 18px;
+  border: 1px solid #e7edf3;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.quick-item:hover {
+  border-color: #1688cf;
+  background: #f7fbff;
+}
+
+.quick-item strong {
+  font-size: 14px;
+}
+
+.quick-item p {
+  font-size: 12px;
+  color: #8794a3;
+  margin-top: 7px;
+}
+
+.status {
+  font-size: 12px;
+  color: #8794a3;
+  text-align: center;
+  padding: 20px;
+}
+
+/* NAVEGACION MOVIL */
+
+.mobile-nav,
+.more-menu {
+  display: none;
+}
+
+/* TABLETS */
+
+@media(max-width: 850px) {
+  .sidebar {
+    width: 210px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* CELULARES */
+
+@media(max-width: 600px) {
+
+  .app {
+    display: block;
+    min-height: 100vh;
+    padding-bottom: 72px;
+  }
+
+  /* Ocultar menu lateral */
+  .sidebar {
+    display: none;
+  }
+
+  .topbar {
+    height: 58px;
+    padding: 0 14px;
+  }
+
+  .topbar small {
+    font-size: 9px;
+  }
+
+  .user {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .content {
+    padding: 17px 13px;
+  }
+
+  .welcome {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+  .welcome p {
+    line-height: 1.5;
+  }
+
+  .welcome button {
+    width: 100%;
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .card {
+    padding: 14px 11px;
+  }
+
+  .card-label {
+    font-size: 10px;
+    line-height: 1.4;
+    min-height: 28px;
+  }
+
+  .card-value {
+    font-size: 23px;
+  }
+
+  .card-note {
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .panel {
+    padding: 16px 13px;
+  }
+
+  .quick {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .quick-item {
+    padding: 15px;
+  }
+
+  /* BARRA INFERIOR FIJA */
+
+  .mobile-nav {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 67px;
+    background: white;
+    border-top: 1px solid #e3eaf0;
+    box-shadow: 0 -3px 15px rgba(20, 40, 60, .08);
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .mobile-tab {
+    border: none;
+    background: white;
+    color: #8290a0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 1px;
+    border-radius: 0;
+    font-size: 10px;
+    font-weight: normal;
+  }
+
+  .mobile-tab:hover {
+    background: #f5f9fc;
+  }
+
+  .mobile-tab.active {
+    color: #1688cf;
+    background: white;
+    font-weight: bold;
+  }
+
+  .tab-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  /* MENU MAS */
+
+  .more-menu {
+    position: fixed;
+    bottom: 73px;
+    right: 10px;
+    width: 190px;
+    background: white;
+    border: 1px solid #e5eaf0;
+    border-radius: 12px;
+    box-shadow: 0 5px 25px rgba(0,0,0,.15);
+    padding: 8px;
+    z-index: 1001;
+  }
+
+  .more-menu.show {
+    display: block;
+  }
+
+  .more-item {
+    padding: 13px 12px;
+    font-size: 13px;
+    color: #263449;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+
+  .more-item:hover {
+    background: #edf5fb;
+  }
+}
+
 </style>
 </head>
+
 <body>
+
 <div class="app">
-<aside class="sidebar">
-<div class="logo">RENUEVO <span>TRUCKS</span></div>
-<div class="subtitle">SISTEMA DE GESTIÓN</div>
-<div class="menu-title">PRINCIPAL</div>
-<div class="menu-item active">▦ &nbsp; Panel principal</div>
-<div class="menu-item">▤ &nbsp; Nueva proforma</div>
-<div class="menu-item">▣ &nbsp; Historial</div>
-<div class="menu-title">ADMINISTRACIÓN</div>
-<div class="menu-item">▧ &nbsp; Productos y servicios</div>
-<div class="menu-item">♙ &nbsp; Clientes</div>
-<div class="menu-item">⚙ &nbsp; Configuración</div>
-</aside>
-<main class="main">
-<header class="topbar">
-<small>GESTIÓN COMERCIAL / PANEL PRINCIPAL</small>
-<div class="user">● Administrador</div>
-</header>
-<section class="content">
-<div class="welcome">
-<div>
-<h1>Panel principal</h1>
-<p>Bienvenido al sistema de gestión de Renuevo Trucks.</p>
+
+  <!-- MENU COMPUTADORA -->
+
+  <aside class="sidebar">
+
+    <div class="logo">
+      RENUEVO <span>TRUCKS</span>
+    </div>
+
+    <div class="subtitle">SISTEMA DE GESTIÓN</div>
+
+    <div class="menu-title">PRINCIPAL</div>
+
+    <div class="menu-item active" data-page="Panel principal">
+      ▦ &nbsp; Panel principal
+    </div>
+
+    <div class="menu-item" data-page="Nueva proforma">
+      ▤ &nbsp; Nueva proforma
+    </div>
+
+    <div class="menu-item" data-page="Historial">
+      ▣ &nbsp; Historial
+    </div>
+
+    <div class="menu-title">ADMINISTRACIÓN</div>
+
+    <div class="menu-item" data-page="Productos y servicios">
+      ▧ &nbsp; Productos y servicios
+    </div>
+
+    <div class="menu-item" data-page="Clientes">
+      ♙ &nbsp; Clientes
+    </div>
+
+    <div class="menu-item" data-page="Configuración">
+      ⚙ &nbsp; Configuración
+    </div>
+
+  </aside>
+
+  <!-- CONTENIDO PRINCIPAL -->
+
+  <main class="main">
+
+    <header class="topbar">
+
+      <small id="breadcrumb">
+        GESTIÓN COMERCIAL / PANEL PRINCIPAL
+      </small>
+
+      <div class="user">● Administrador</div>
+
+    </header>
+
+    <section class="content">
+
+      <div class="welcome">
+
+        <div>
+          <h1>Panel principal</h1>
+          <p>Bienvenido al sistema de gestión de Renuevo Trucks.</p>
+        </div>
+
+        <button onclick="selectPage('Nueva proforma')">
+          + Nueva proforma
+        </button>
+
+      </div>
+
+      <div class="cards">
+
+        <div class="card">
+          <div class="card-label">PROFORMAS GENERADAS</div>
+          <div class="card-value">0</div>
+          <div class="card-note">Total de documentos registrados</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">CLIENTES REGISTRADOS</div>
+          <div class="card-value">0</div>
+          <div class="card-note">Clientes en el sistema</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">PRODUCTOS Y SERVICIOS</div>
+          <div class="card-value">0</div>
+          <div class="card-note">Elementos del catálogo</div>
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <h2>Accesos rápidos</h2>
+
+        <div class="quick">
+
+          <div class="quick-item"
+               onclick="selectPage('Nueva proforma')">
+            <strong>＋ Nueva proforma</strong>
+            <p>Crear un documento y agregar productos por código.</p>
+          </div>
+
+          <div class="quick-item"
+               onclick="selectPage('Productos y servicios')">
+            <strong>▤ Catálogo</strong>
+            <p>Administrar productos, materiales y mano de obra.</p>
+          </div>
+
+          <div class="quick-item"
+               onclick="selectPage('Clientes')">
+            <strong>♙ Clientes</strong>
+            <p>Consultar y registrar información de clientes.</p>
+          </div>
+
+          <div class="quick-item"
+               onclick="selectPage('Historial')">
+            <strong>◷ Historial</strong>
+            <p>Consultar documentos generados anteriormente.</p>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="panel">
+
+        <h2>Actividad del sistema</h2>
+
+        <div class="status">
+          Todavía no existen registros de actividad.
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
 </div>
-<button onclick="alert('El módulo de proformas estará disponible en la siguiente etapa.')">+ Nueva proforma</button>
+
+<!-- MENU EMERGENTE MAS -->
+
+<div class="more-menu" id="moreMenu">
+
+  <div class="more-item" onclick="selectPage('Historial')">
+    ◷ &nbsp; Historial
+  </div>
+
+  <div class="more-item" onclick="selectPage('Configuración')">
+    ⚙ &nbsp; Configuración
+  </div>
+
 </div>
-<div class="cards">
-<div class="card">
-<div class="card-label">PROFORMAS GENERADAS</div>
-<div class="card-value">0</div>
-<div class="card-note">Total de documentos registrados</div>
-</div>
-<div class="card">
-<div class="card-label">CLIENTES REGISTRADOS</div>
-<div class="card-value">0</div>
-<div class="card-note">Clientes en el sistema</div>
-</div>
-<div class="card">
-<div class="card-label">PRODUCTOS Y SERVICIOS</div>
-<div class="card-value">0</div>
-<div class="card-note">Elementos del catálogo</div>
-</div>
-</div>
-<div class="panel">
-<h2>Accesos rápidos</h2>
-<div class="quick">
-<div class="quick-item" onclick="alert('Próximamente: creación de proformas')">
-<strong>＋ Nueva proforma</strong>
-<p>Crear un documento y agregar productos por código.</p>
-</div>
-<div class="quick-item" onclick="alert('Próximamente: catálogo de productos')">
-<strong>▤ Catálogo</strong>
-<p>Administrar productos, materiales y mano de obra.</p>
-</div>
-<div class="quick-item" onclick="alert('Próximamente: clientes')">
-<strong>♙ Clientes</strong>
-<p>Consultar y registrar información de clientes.</p>
-</div>
-<div class="quick-item" onclick="alert('Próximamente: historial')">
-<strong>◷ Historial</strong>
-<p>Consultar documentos generados anteriormente.</p>
-</div>
-</div>
-</div>
-<div class="panel">
-<h2>Actividad del sistema</h2>
-<div class="status">Todavía no existen registros de actividad.</div>
-</div>
-</section>
-</main>
-</div>
+
+<!-- PESTAÑAS INFERIORES PARA CELULAR -->
+
+<nav class="mobile-nav">
+
+  <button class="mobile-tab active"
+          data-page="Panel principal"
+          onclick="selectPage('Panel principal')">
+    <span class="tab-icon">⌂</span>
+    <span>Inicio</span>
+  </button>
+
+  <button class="mobile-tab"
+          data-page="Nueva proforma"
+          onclick="selectPage('Nueva proforma')">
+    <span class="tab-icon">▤</span>
+    <span>Proformas</span>
+  </button>
+
+  <button class="mobile-tab"
+          data-page="Clientes"
+          onclick="selectPage('Clientes')">
+    <span class="tab-icon">♙</span>
+    <span>Clientes</span>
+  </button>
+
+  <button class="mobile-tab"
+          data-page="Productos y servicios"
+          onclick="selectPage('Productos y servicios')">
+    <span class="tab-icon">▧</span>
+    <span>Catálogo</span>
+  </button>
+
+  <button class="mobile-tab"
+          id="moreButton"
+          onclick="toggleMore()">
+    <span class="tab-icon">☰</span>
+    <span>Más</span>
+  </button>
+
+</nav>
+
+<script>
+
+function selectPage(page) {
+
+  const breadcrumb = document.getElementById('breadcrumb');
+  const title = document.querySelector('.welcome h1');
+  const moreMenu = document.getElementById('moreMenu');
+
+  breadcrumb.textContent = 'GESTIÓN COMERCIAL / ' + page.toUpperCase();
+  title.textContent = page;
+
+  document.querySelectorAll('.menu-item').forEach(item => {
+    item.classList.toggle(
+      'active',
+      item.dataset.page === page
+    );
+  });
+
+  document.querySelectorAll('.mobile-tab').forEach(item => {
+    item.classList.toggle(
+      'active',
+      item.dataset.page === page
+    );
+  });
+
+  moreMenu.classList.remove('show');
+
+  if (page !== 'Panel principal') {
+    alert('El módulo "' + page + '" estará disponible en la siguiente etapa.');
+  }
+
+}
+
+function toggleMore() {
+
+  const menu = document.getElementById('moreMenu');
+  menu.classList.toggle('show');
+
+}
+
+document.addEventListener('click', function(event) {
+
+  const menu = document.getElementById('moreMenu');
+  const button = document.getElementById('moreButton');
+
+  if (!menu.contains(event.target) &&
+      !button.contains(event.target)) {
+    menu.classList.remove('show');
+  }
+
+});
+
+</script>
+
 </body>
 </html>
