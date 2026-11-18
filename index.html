@@ -3,674 +3,418 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Renuevo Trucks | Sistema de Proformas</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renuevo Trucks | Proformas</title>
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f3f6fa;color:#263449}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer;border:0;border-radius:7px;padding:11px 15px;background:#1688cf;color:white;font-weight:bold}
+button:hover{background:#0872b4}
+.secondary{background:#eaf1f7;color:#263449}
+.danger{background:#fff0f0;color:#b42318}
+.app{display:flex;min-height:100vh}
+.sidebar{width:245px;flex-shrink:0;background:#172536;color:white;padding:25px 17px}
+.logo{font-size:21px;font-weight:bold;margin-bottom:6px}
+.logo span{color:#36a9e8}
+.subtitle{font-size:10px;color:#aab8c7;letter-spacing:2px;margin-bottom:35px}
+.menu-title{font-size:10px;color:#8495a8;margin:24px 10px 10px}
+.menu-item{padding:13px 12px;border-radius:7px;margin:5px 0;color:#c5d0dc;font-size:13px;cursor:pointer}
+.menu-item.active{background:#24425e;color:white;border-left:3px solid #35a9e8}
+.main{flex:1;min-width:0}
+.topbar{height:65px;background:white;border-bottom:1px solid #e5eaf0;display:flex;align-items:center;justify-content:space-between;padding:0 25px}
+.topbar small{color:#8592a2}
+.user{background:#e8f3fc;color:#1976b9;padding:9px 13px;border-radius:25px;font-size:12px}
+.content{max-width:1250px;margin:auto;padding:25px}
+.page-title{font-size:24px;margin-bottom:7px}
+.muted{color:#8290a0;font-size:13px}
+.panel{background:white;border:1px solid #e5eaf0;border-radius:10px;padding:20px;margin:18px 0}
+.panel h2{font-size:16px;margin-bottom:17px}
+.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field label{font-size:12px;color:#637286;font-weight:bold}
+.field input,.field select,.field textarea{width:100%;border:1px solid #dce4ec;border-radius:7px;padding:11px;background:white;color:#263449;min-width:0}
+.field textarea{min-height:65px;resize:vertical}
+.wide{grid-column:1/-1}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:760px}
+th{background:#f2f6fa;color:#637286;font-size:11px;text-align:left;padding:12px 8px}
+td{border-bottom:1px solid #edf0f4;padding:8px}
+td input,td select{width:100%;min-width:65px;border:1px solid #dce4ec;border-radius:5px;padding:8px}
+td .description{min-width:190px}
+.line-total{font-weight:bold;white-space:nowrap}
+.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:15px}
+.summary{max-width:390px;margin:18px 0 0 auto}
+.sum-row{display:flex;justify-content:space-between;padding:9px 3px;font-size:14px}
+.sum-row.total{border-top:2px solid #263449;margin-top:5px;padding-top:15px;font-weight:bold;font-size:20px}
+.discount-box{display:flex;gap:8px;align-items:center}
+.discount-box input{width:100px;border:1px solid #dce4ec;padding:9px;border-radius:6px}
+.note{font-size:12px;color:#8190a0;margin-top:10px}
+.history-item{border:1px solid #e5eaf0;border-radius:8px;padding:13px;margin:9px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hidden{display:none!important}
+.mobile-nav{display:none}
+.empty{text-align:center;padding:25px;color:#8492a2;font-size:13px}
+@media(max-width:850px){.sidebar{width:205px}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){
+.app{display:block;padding-bottom:70px}
+.sidebar{display:none}
+.topbar{height:55px;padding:0 13px}
+.topbar small{font-size:9px}
+.user{font-size:10px;padding:7px 9px}
+.content{padding:15px 12px}
+.page-title{font-size:21px}
+.panel{padding:14px;margin:13px 0}
+.form-grid{grid-template-columns:1fr 1fr;gap:11px}
+.field input,.field select{padding:10px 8px;font-size:13px}
+.wide{grid-column:1/-1}
+.actions button{flex:1}
+.summary{width:100%}
+.mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;width:100%;height:65px;background:white;border-top:1px solid #e1e7ed;z-index:10}
+.mobile-nav button{background:white;color:#8290a0;border-radius:0;padding:5px 1px;font-size:10px;font-weight:normal;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.mobile-nav button.active{color:#1688cf;font-weight:bold}
+.mobile-nav span:first-child{font-size:19px}
+.history-item{align-items:flex-start;flex-direction:column}
 }
-
-body {
-  font-family: Arial, sans-serif;
-  background: #f3f6fa;
-  color: #263449;
+@media print{
+body{background:white}
+.sidebar,.topbar,.mobile-nav,.no-print,.actions{display:none!important}
+.app{display:block;padding:0}
+.content{max-width:none;padding:0}
+.panel{border:0;padding:8px;margin:5px 0}
+#formPage{display:block!important}
+#historyPage{display:none!important}
+input,select,textarea{border:0!important;padding:3px!important;appearance:none}
+table{min-width:0}
+th,td{font-size:10px;padding:5px}
+.page-title{font-size:20px}
 }
-
-.app {
-  display: flex;
-  min-height: 100vh;
-}
-
-/* MENU DE COMPUTADORA */
-
-.sidebar {
-  width: 250px;
-  background: #172536;
-  color: white;
-  padding: 25px 17px;
-  flex-shrink: 0;
-}
-
-.logo {
-  font-size: 21px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  margin-bottom: 5px;
-}
-
-.logo span {
-  color: #36a9e8;
-}
-
-.subtitle {
-  font-size: 10px;
-  color: #aab8c7;
-  letter-spacing: 2px;
-  margin-bottom: 35px;
-}
-
-.menu-title {
-  font-size: 10px;
-  color: #8495a8;
-  margin: 25px 10px 12px;
-  letter-spacing: 1px;
-}
-
-.menu-item {
-  padding: 13px 12px;
-  border-radius: 7px;
-  margin: 5px 0;
-  color: #c5d0dc;
-  font-size: 13px;
-  cursor: pointer;
-}
-
-.menu-item.active {
-  background: #24425e;
-  color: white;
-  border-left: 3px solid #35a9e8;
-}
-
-.menu-item:hover {
-  background: #263c53;
-}
-
-/* CONTENIDO */
-
-.main {
-  flex: 1;
-  min-width: 0;
-}
-
-.topbar {
-  height: 70px;
-  background: white;
-  border-bottom: 1px solid #e5eaf0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-}
-
-.topbar small {
-  color: #8592a2;
-}
-
-.user {
-  background: #e8f3fc;
-  color: #1976b9;
-  padding: 10px 14px;
-  border-radius: 30px;
-  font-size: 12px;
-}
-
-.content {
-  padding: 30px;
-  max-width: 1300px;
-  margin: auto;
-}
-
-.welcome {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 28px;
-  gap: 15px;
-}
-
-h1 {
-  font-size: 25px;
-  margin-bottom: 7px;
-}
-
-.welcome p {
-  font-size: 13px;
-  color: #8592a2;
-}
-
-button {
-  border: 0;
-  border-radius: 7px;
-  padding: 12px 17px;
-  background: #1688cf;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #0872b4;
-}
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-  margin-bottom: 27px;
-}
-
-.card {
-  background: white;
-  padding: 22px;
-  border: 1px solid #e8edf2;
-  border-radius: 10px;
-}
-
-.card-label {
-  font-size: 12px;
-  color: #8995a3;
-  margin-bottom: 15px;
-}
-
-.card-value {
-  font-size: 26px;
-  font-weight: bold;
-  color: #20354b;
-}
-
-.card-note {
-  font-size: 11px;
-  color: #8b99a8;
-  margin-top: 8px;
-}
-
-.panel {
-  background: white;
-  border: 1px solid #e8edf2;
-  border-radius: 10px;
-  padding: 23px;
-  margin-bottom: 20px;
-}
-
-.panel h2 {
-  font-size: 16px;
-  margin-bottom: 18px;
-}
-
-.quick {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-}
-
-.quick-item {
-  padding: 18px;
-  border: 1px solid #e7edf3;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-.quick-item:hover {
-  border-color: #1688cf;
-  background: #f7fbff;
-}
-
-.quick-item strong {
-  font-size: 14px;
-}
-
-.quick-item p {
-  font-size: 12px;
-  color: #8794a3;
-  margin-top: 7px;
-}
-
-.status {
-  font-size: 12px;
-  color: #8794a3;
-  text-align: center;
-  padding: 20px;
-}
-
-/* NAVEGACION MOVIL */
-
-.mobile-nav,
-.more-menu {
-  display: none;
-}
-
-/* TABLETS */
-
-@media(max-width: 850px) {
-  .sidebar {
-    width: 210px;
-  }
-
-  .content {
-    padding: 20px;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* CELULARES */
-
-@media(max-width: 600px) {
-
-  .app {
-    display: block;
-    min-height: 100vh;
-    padding-bottom: 72px;
-  }
-
-  /* Ocultar menu lateral */
-  .sidebar {
-    display: none;
-  }
-
-  .topbar {
-    height: 58px;
-    padding: 0 14px;
-  }
-
-  .topbar small {
-    font-size: 9px;
-  }
-
-  .user {
-    padding: 8px 10px;
-    font-size: 10px;
-  }
-
-  .content {
-    padding: 17px 13px;
-  }
-
-  .welcome {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  h1 {
-    font-size: 22px;
-  }
-
-  .welcome p {
-    line-height: 1.5;
-  }
-
-  .welcome button {
-    width: 100%;
-  }
-
-  .cards {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .card {
-    padding: 14px 11px;
-  }
-
-  .card-label {
-    font-size: 10px;
-    line-height: 1.4;
-    min-height: 28px;
-  }
-
-  .card-value {
-    font-size: 23px;
-  }
-
-  .card-note {
-    font-size: 10px;
-    line-height: 1.4;
-  }
-
-  .panel {
-    padding: 16px 13px;
-  }
-
-  .quick {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .quick-item {
-    padding: 15px;
-  }
-
-  /* BARRA INFERIOR FIJA */
-
-  .mobile-nav {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 67px;
-    background: white;
-    border-top: 1px solid #e3eaf0;
-    box-shadow: 0 -3px 15px rgba(20, 40, 60, .08);
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .mobile-tab {
-    border: none;
-    background: white;
-    color: #8290a0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    padding: 5px 1px;
-    border-radius: 0;
-    font-size: 10px;
-    font-weight: normal;
-  }
-
-  .mobile-tab:hover {
-    background: #f5f9fc;
-  }
-
-  .mobile-tab.active {
-    color: #1688cf;
-    background: white;
-    font-weight: bold;
-  }
-
-  .tab-icon {
-    font-size: 20px;
-    line-height: 1;
-  }
-
-  /* MENU MAS */
-
-  .more-menu {
-    position: fixed;
-    bottom: 73px;
-    right: 10px;
-    width: 190px;
-    background: white;
-    border: 1px solid #e5eaf0;
-    border-radius: 12px;
-    box-shadow: 0 5px 25px rgba(0,0,0,.15);
-    padding: 8px;
-    z-index: 1001;
-  }
-
-  .more-menu.show {
-    display: block;
-  }
-
-  .more-item {
-    padding: 13px 12px;
-    font-size: 13px;
-    color: #263449;
-    border-radius: 7px;
-    cursor: pointer;
-  }
-
-  .more-item:hover {
-    background: #edf5fb;
-  }
-}
-
 </style>
 </head>
-
 <body>
-
 <div class="app">
+<aside class="sidebar">
+ <div class="logo">RENUEVO <span>TRUCKS</span></div>
+ <div class="subtitle">SISTEMA DE GESTIÓN</div>
+ <div class="menu-title">PRINCIPAL</div>
+ <div class="menu-item" onclick="showHome()">▦ Panel principal</div>
+ <div class="menu-item active" onclick="showForm()">▤ Nueva proforma</div>
+ <div class="menu-item" onclick="showHistory()">▣ Historial</div>
+ <div class="menu-title">ADMINISTRACIÓN</div>
+ <div class="menu-item">▧ Productos y servicios</div>
+ <div class="menu-item">♙ Clientes</div>
+</aside>
 
-  <!-- MENU COMPUTADORA -->
+<main class="main">
+<header class="topbar">
+ <small>RENUEVO TRUCKS / GESTIÓN DE PROFORMAS</small>
+ <div class="user">● Administrador</div>
+</header>
 
-  <aside class="sidebar">
+<section class="content" id="formPage">
+ <h1 class="page-title">Nueva proforma</h1>
+ <p class="muted">Registro y administración de cotizaciones de servicios.</p>
 
-    <div class="logo">
-      RENUEVO <span>TRUCKS</span>
-    </div>
+ <div class="panel">
+  <h2>Datos del documento</h2>
+  <div class="form-grid">
+   <div class="field">
+    <label>Número de proforma</label>
+    <input id="number" readonly>
+   </div>
+   <div class="field">
+    <label>Fecha</label>
+    <input id="date" type="date">
+   </div>
+   <div class="field">
+    <label>Estado</label>
+    <select id="status"><option>Pendiente</option><option>Enviada</option><option>Aprobada</option><option>Rechazada</option></select>
+   </div>
+  </div>
+ </div>
 
-    <div class="subtitle">SISTEMA DE GESTIÓN</div>
+ <div class="panel">
+  <h2>Datos del cliente</h2>
+  <div class="form-grid">
+   <div class="field"><label>Nombre o razón social</label><input id="client" placeholder="Nombre del cliente"></div>
+   <div class="field"><label>NIT / CI</label><input id="identity" placeholder="Documento"></div>
+   <div class="field"><label>Teléfono</label><input id="phone" placeholder="Teléfono"></div>
+   <div class="field"><label>Placa del vehículo</label><input id="plate" placeholder="Ej. 1234 ABC"></div>
+   <div class="field"><label>Marca</label><input id="make" placeholder="Marca"></div>
+   <div class="field"><label>Modelo</label><input id="model" placeholder="Modelo"></div>
+   <div class="field"><label>Kilometraje / horas</label><input id="mileage" placeholder="Kilometraje"></div>
+   <div class="field"><label>Contacto / responsable</label><input id="contact" placeholder="Responsable"></div>
+  </div>
+ </div>
 
-    <div class="menu-title">PRINCIPAL</div>
+ <div class="panel">
+  <h2>Detalle de trabajos y materiales</h2>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Tipo</th><th>Código</th><th>Descripción</th><th>Cant.</th><th>Unidad</th><th>Precio Bs</th><th>Total Bs</th><th></th></tr></thead>
+    <tbody id="lines"></tbody>
+   </table>
+  </div>
+  <div class="actions no-print">
+   <button type="button" onclick="addLine()">+ Agregar concepto</button>
+  </div>
+  <p class="note">Puedes agregar mano de obra, repuestos, lubricantes, materiales y conceptos manuales.</p>
+ </div>
 
-    <div class="menu-item active" data-page="Panel principal">
-      ▦ &nbsp; Panel principal
-    </div>
+ <div class="panel">
+  <h2>Observaciones y descuentos</h2>
+  <div class="form-grid">
+   <div class="field wide">
+    <label>Observaciones</label>
+    <textarea id="observations" placeholder="Detalle adicional del trabajo..."></textarea>
+   </div>
+   <div class="field">
+    <label>Tipo de descuento</label>
+    <select id="discountType" onchange="calculate()">
+     <option value="percent">Porcentaje (%)</option>
+     <option value="amount">Importe (Bs)</option>
+    </select>
+   </div>
+   <div class="field">
+    <label>Descuento general</label>
+    <input id="discount" type="number" min="0" step="0.01" value="0" oninput="calculate()">
+   </div>
+  </div>
+  <div class="summary">
+   <div class="sum-row"><span>Subtotal</span><strong id="subtotal">0,00 Bs</strong></div>
+   <div class="sum-row"><span>Descuento</span><strong id="discountValue">0,00 Bs</strong></div>
+   <div class="sum-row total"><span>TOTAL</span><strong id="total">0,00 Bs</strong></div>
+  </div>
+ </div>
 
-    <div class="menu-item" data-page="Nueva proforma">
-      ▤ &nbsp; Nueva proforma
-    </div>
+ <div class="actions no-print">
+  <button onclick="saveQuote()">Guardar proforma</button>
+  <button class="secondary" onclick="newQuote()">Nueva / Limpiar</button>
+  <button class="secondary" onclick="window.print()">Imprimir / PDF</button>
+  <button class="secondary" onclick="showHistory()">Ver historial</button>
+ </div>
+ <p class="note no-print" id="message">Los cambios se guardan en este navegador en esta primera versión.</p>
+</section>
 
-    <div class="menu-item" data-page="Historial">
-      ▣ &nbsp; Historial
-    </div>
-
-    <div class="menu-title">ADMINISTRACIÓN</div>
-
-    <div class="menu-item" data-page="Productos y servicios">
-      ▧ &nbsp; Productos y servicios
-    </div>
-
-    <div class="menu-item" data-page="Clientes">
-      ♙ &nbsp; Clientes
-    </div>
-
-    <div class="menu-item" data-page="Configuración">
-      ⚙ &nbsp; Configuración
-    </div>
-
-  </aside>
-
-  <!-- CONTENIDO PRINCIPAL -->
-
-  <main class="main">
-
-    <header class="topbar">
-
-      <small id="breadcrumb">
-        GESTIÓN COMERCIAL / PANEL PRINCIPAL
-      </small>
-
-      <div class="user">● Administrador</div>
-
-    </header>
-
-    <section class="content">
-
-      <div class="welcome">
-
-        <div>
-          <h1>Panel principal</h1>
-          <p>Bienvenido al sistema de gestión de Renuevo Trucks.</p>
-        </div>
-
-        <button onclick="selectPage('Nueva proforma')">
-          + Nueva proforma
-        </button>
-
-      </div>
-
-      <div class="cards">
-
-        <div class="card">
-          <div class="card-label">PROFORMAS GENERADAS</div>
-          <div class="card-value">0</div>
-          <div class="card-note">Total de documentos registrados</div>
-        </div>
-
-        <div class="card">
-          <div class="card-label">CLIENTES REGISTRADOS</div>
-          <div class="card-value">0</div>
-          <div class="card-note">Clientes en el sistema</div>
-        </div>
-
-        <div class="card">
-          <div class="card-label">PRODUCTOS Y SERVICIOS</div>
-          <div class="card-value">0</div>
-          <div class="card-note">Elementos del catálogo</div>
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <h2>Accesos rápidos</h2>
-
-        <div class="quick">
-
-          <div class="quick-item"
-               onclick="selectPage('Nueva proforma')">
-            <strong>＋ Nueva proforma</strong>
-            <p>Crear un documento y agregar productos por código.</p>
-          </div>
-
-          <div class="quick-item"
-               onclick="selectPage('Productos y servicios')">
-            <strong>▤ Catálogo</strong>
-            <p>Administrar productos, materiales y mano de obra.</p>
-          </div>
-
-          <div class="quick-item"
-               onclick="selectPage('Clientes')">
-            <strong>♙ Clientes</strong>
-            <p>Consultar y registrar información de clientes.</p>
-          </div>
-
-          <div class="quick-item"
-               onclick="selectPage('Historial')">
-            <strong>◷ Historial</strong>
-            <p>Consultar documentos generados anteriormente.</p>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="panel">
-
-        <h2>Actividad del sistema</h2>
-
-        <div class="status">
-          Todavía no existen registros de actividad.
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-
+<section class="content hidden" id="historyPage">
+ <h1 class="page-title">Historial de proformas</h1>
+ <p class="muted">Consulta, edita y revisa las versiones guardadas.</p>
+ <div class="panel">
+  <div id="historyList"></div>
+ </div>
+ <button onclick="showForm()">Volver a proformas</button>
+</section>
+</main>
 </div>
 
-<!-- MENU EMERGENTE MAS -->
-
-<div class="more-menu" id="moreMenu">
-
-  <div class="more-item" onclick="selectPage('Historial')">
-    ◷ &nbsp; Historial
-  </div>
-
-  <div class="more-item" onclick="selectPage('Configuración')">
-    ⚙ &nbsp; Configuración
-  </div>
-
-</div>
-
-<!-- PESTAÑAS INFERIORES PARA CELULAR -->
-
-<nav class="mobile-nav">
-
-  <button class="mobile-tab active"
-          data-page="Panel principal"
-          onclick="selectPage('Panel principal')">
-    <span class="tab-icon">⌂</span>
-    <span>Inicio</span>
-  </button>
-
-  <button class="mobile-tab"
-          data-page="Nueva proforma"
-          onclick="selectPage('Nueva proforma')">
-    <span class="tab-icon">▤</span>
-    <span>Proformas</span>
-  </button>
-
-  <button class="mobile-tab"
-          data-page="Clientes"
-          onclick="selectPage('Clientes')">
-    <span class="tab-icon">♙</span>
-    <span>Clientes</span>
-  </button>
-
-  <button class="mobile-tab"
-          data-page="Productos y servicios"
-          onclick="selectPage('Productos y servicios')">
-    <span class="tab-icon">▧</span>
-    <span>Catálogo</span>
-  </button>
-
-  <button class="mobile-tab"
-          id="moreButton"
-          onclick="toggleMore()">
-    <span class="tab-icon">☰</span>
-    <span>Más</span>
-  </button>
-
+<nav class="mobile-nav no-print">
+ <button onclick="showHome()"><span>⌂</span>Inicio</button>
+ <button class="active" onclick="showForm()"><span>▤</span>Proformas</button>
+ <button onclick="showHistory()"><span>◷</span>Historial</button>
+ <button onclick="showForm()"><span>＋</span>Crear</button>
+ <button onclick="showHistory()"><span>☰</span>Más</button>
 </nav>
 
 <script>
+const KEY="renuevo_proformas_v1";
+let currentId=null;
+let quotes=loadQuotes();
 
-function selectPage(page) {
-
-  const breadcrumb = document.getElementById('breadcrumb');
-  const title = document.querySelector('.welcome h1');
-  const moreMenu = document.getElementById('moreMenu');
-
-  breadcrumb.textContent = 'GESTIÓN COMERCIAL / ' + page.toUpperCase();
-  title.textContent = page;
-
-  document.querySelectorAll('.menu-item').forEach(item => {
-    item.classList.toggle(
-      'active',
-      item.dataset.page === page
-    );
-  });
-
-  document.querySelectorAll('.mobile-tab').forEach(item => {
-    item.classList.toggle(
-      'active',
-      item.dataset.page === page
-    );
-  });
-
-  moreMenu.classList.remove('show');
-
-  if (page !== 'Panel principal') {
-    alert('El módulo "' + page + '" estará disponible en la siguiente etapa.');
-  }
-
+function loadQuotes(){
+ try{return JSON.parse(localStorage.getItem(KEY))||[]}
+ catch(e){return []}
 }
-
-function toggleMore() {
-
-  const menu = document.getElementById('moreMenu');
-  menu.classList.toggle('show');
-
+function persist(){
+ localStorage.setItem(KEY,JSON.stringify(quotes));
 }
-
-document.addEventListener('click', function(event) {
-
-  const menu = document.getElementById('moreMenu');
-  const button = document.getElementById('moreButton');
-
-  if (!menu.contains(event.target) &&
-      !button.contains(event.target)) {
-    menu.classList.remove('show');
-  }
-
-});
-
+function money(n){
+ return (Number(n)||0).toLocaleString("es-BO",{minimumFractionDigits:2,maximumFractionDigits:2})+" Bs";
+}
+function nextNumber(){
+ let max=0;
+ quotes.forEach(q=>max=Math.max(max,Number(q.number)||0));
+ return String(max+1).padStart(4,"0");
+}
+function newQuote(){
+ currentId=null;
+ document.querySelectorAll("#formPage input:not([readonly]),#formPage textarea").forEach(el=>el.value="");
+ document.getElementById("date").value=new Date().toISOString().slice(0,10);
+ document.getElementById("number").value=nextNumber();
+ document.getElementById("status").value="Pendiente";
+ document.getElementById("discount").value=0;
+ document.getElementById("discountType").value="percent";
+ document.getElementById("lines").innerHTML="";
+ addLine();
+ calculate();
+ document.getElementById("message").textContent="Nueva proforma lista para completar.";
+}
+function addLine(data={}){
+ const tr=document.createElement("tr");
+ tr.innerHTML=`
+ <td><select class="type">
+ <option>Mano de obra</option><option>Repuestos</option><option>Lubricantes</option><option>Materiales</option><option>Otros</option>
+ </select></td>
+ <td><input class="code" placeholder="Código"></td>
+ <td><input class="description" placeholder="Descripción"></td>
+ <td><input class="qty" type="number" min="0" step="0.01" value="1"></td>
+ <td><input class="unit" placeholder="Unid." value="UNID."></td>
+ <td><input class="price" type="number" min="0" step="0.01" value="0"></td>
+ <td class="line-total">0,00 Bs</td>
+ <td><button class="danger no-print remove" type="button">×</button></td>`;
+ tr.querySelector(".type").value=data.type||"Mano de obra";
+ tr.querySelector(".code").value=data.code||"";
+ tr.querySelector(".description").value=data.description||"";
+ tr.querySelector(".qty").value=data.qty??1;
+ tr.querySelector(".unit").value=data.unit||"UNID.";
+ tr.querySelector(".price").value=data.price??0;
+ tr.querySelectorAll("input,select").forEach(el=>el.addEventListener("input",calculate));
+ tr.querySelector(".remove").addEventListener("click",()=>{tr.remove();calculate()});
+ document.getElementById("lines").appendChild(tr);
+ calculate();
+}
+function getLines(){
+ return [...document.querySelectorAll("#lines tr")].map(tr=>({
+ type:tr.querySelector(".type").value,
+ code:tr.querySelector(".code").value,
+ description:tr.querySelector(".description").value,
+ qty:Number(tr.querySelector(".qty").value)||0,
+ unit:tr.querySelector(".unit").value,
+ price:Number(tr.querySelector(".price").value)||0
+ }));
+}
+function calculate(){
+ let subtotal=0;
+ document.querySelectorAll("#lines tr").forEach(tr=>{
+  const qty=Number(tr.querySelector(".qty").value)||0;
+  const price=Number(tr.querySelector(".price").value)||0;
+  const total=qty*price;
+  subtotal+=total;
+  tr.querySelector(".line-total").textContent=money(total);
+ });
+ let d=Number(document.getElementById("discount").value)||0;
+ let discount=document.getElementById("discountType").value==="percent"?subtotal*d/100:d;
+ discount=Math.min(Math.max(discount,0),subtotal);
+ document.getElementById("subtotal").textContent=money(subtotal);
+ document.getElementById("discountValue").textContent=money(discount);
+ document.getElementById("total").textContent=money(subtotal-discount);
+ return {subtotal,discount,total:subtotal-discount};
+}
+function readQuote(){
+ return {
+ number:document.getElementById("number").value,
+ date:document.getElementById("date").value,
+ status:document.getElementById("status").value,
+ client:document.getElementById("client").value,
+ identity:document.getElementById("identity").value,
+ phone:document.getElementById("phone").value,
+ plate:document.getElementById("plate").value,
+ make:document.getElementById("make").value,
+ model:document.getElementById("model").value,
+ mileage:document.getElementById("mileage").value,
+ contact:document.getElementById("contact").value,
+ observations:document.getElementById("observations").value,
+ discount:Number(document.getElementById("discount").value)||0,
+ discountType:document.getElementById("discountType").value,
+ lines:getLines(),
+ totals:calculate()
+ };
+}
+function saveQuote(){
+ const data=readQuote();
+ if(!data.client.trim()){
+  alert("Ingresa el nombre o razón social del cliente.");
+  document.getElementById("client").focus();
+  return;
+ }
+ if(!data.lines.some(l=>l.description.trim())){
+  alert("Agrega al menos un concepto con descripción.");
+  return;
+ }
+ const now=new Date().toISOString();
+ if(currentId){
+  const q=quotes.find(x=>x.id===currentId);
+  if(!q)return;
+  q.versions.push({savedAt:now,data:JSON.parse(JSON.stringify(q.data))});
+  q.data=data;
+  q.updatedAt=now;
+ }else{
+  currentId=crypto.randomUUID?crypto.randomUUID():String(Date.now());
+  quotes.push({id:currentId,number:data.number,createdAt:now,updatedAt:now,data,versions:[]});
+ }
+ persist();
+ document.getElementById("message").textContent="Proforma "+data.number+" guardada correctamente en este navegador.";
+ alert("Proforma "+data.number+" guardada.");
+}
+function showForm(){
+ document.getElementById("formPage").classList.remove("hidden");
+ document.getElementById("historyPage").classList.add("hidden");
+}
+function showHome(){
+ showForm();
+}
+function showHistory(){
+ document.getElementById("formPage").classList.add("hidden");
+ document.getElementById("historyPage").classList.remove("hidden");
+ renderHistory();
+}
+function renderHistory(){
+ const root=document.getElementById("historyList");
+ root.innerHTML="";
+ if(!quotes.length){
+  root.innerHTML='<div class="empty">Todavía no hay proformas guardadas.</div>';
+  return;
+ }
+ [...quotes].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)).forEach(q=>{
+  const div=document.createElement("div");
+  div.className="history-item";
+  const info=document.createElement("div");
+  const strong=document.createElement("strong");
+  strong.textContent="Proforma N.º "+q.number+" — "+(q.data.client||"Sin cliente");
+  const small=document.createElement("p");
+  small.className="muted";
+  small.textContent=(q.data.date||"Sin fecha")+" · "+money(q.data.totals.total)+" · "+q.versions.length+" versiones anteriores";
+  info.append(strong,small);
+  const actions=document.createElement("div");
+  actions.className="actions";
+  const edit=document.createElement("button");
+  edit.textContent="Abrir / editar";
+  edit.onclick=()=>openQuote(q.id);
+  const versions=document.createElement("button");
+  versions.className="secondary";
+  versions.textContent="Versiones";
+  versions.onclick=()=>showVersions(q.id);
+  actions.append(edit,versions);
+  div.append(info,actions);
+  root.appendChild(div);
+ });
+}
+function openQuote(id){
+ const q=quotes.find(x=>x.id===id);
+ if(!q)return;
+ currentId=id;
+ fillForm(q.data);
+ showForm();
+}
+function fillForm(d){
+ document.getElementById("number").value=d.number;
+ ["date","status","client","identity","phone","plate","make","model","mileage","contact","observations","discount","discountType"].forEach(k=>{
+  document.getElementById(k).value=d[k]??"";
+ });
+ document.getElementById("lines").innerHTML="";
+ d.lines.forEach(l=>addLine(l));
+ calculate();
+ document.getElementById("message").textContent="Editando proforma "+d.number+". Al guardar se conservará una copia de la versión anterior.";
+}
+function showVersions(id){
+ const q=quotes.find(x=>x.id===id);
+ if(!q)return;
+ let msg="Historial de versiones de la proforma "+q.number+"\n";
+ if(!q.versions.length)msg+="No existen modificaciones anteriores.";
+ q.versions.forEach((v,i)=>{
+  msg+="\nVersión anterior "+(i+1)+": "+new Date(v.savedAt).toLocaleString()+" — "+money(v.data.totals.total);
+ });
+ alert(msg);
+}
+newQuote();
 </script>
-
 </body>
 </html>
