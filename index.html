@@ -240,7 +240,9 @@ body:not(.authenticated) .login-screen{display:flex}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const KEY="renuevo_proformas_v3";
-const CATALOG_URL="https://script.google.com/macros/s/AKfycbwTCPkUPg91rd443gWQDOsIKKCT0iAZvZu3Fjvnl3iwj09ST6zTAvnYYKu6sw-qlVuS/exec?api=catalog";
+const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwTCPkUPg91rd443gWQDOsIKKCT0iAZvZu3Fjvnl3iwj09ST6zTAvnYYKu6sw-qlVuS/exec";
+const CATALOG_URL=APPS_SCRIPT_URL+"?api=catalog";
+let pdfGenerationPending=false;
 let catalog=[],catalogLoaded=false;
 let quotes=JSON.parse(localStorage.getItem(KEY)||"[]");
 let currentId=null;
@@ -526,25 +528,85 @@ function makePrintRows(title,rows,total){
  return html;
 }
 function printQuote(){
+ if(pdfGenerationPending){alert("Ya se está generando un PDF. Espera un momento.");return}
  const d=collect();
- if(!d.client){alert("Ingresa el nombre del cliente antes de imprimir.");$("client").focus();return}
+ if(!d.client){alert("Ingresa el nombre del cliente antes de generar el PDF.");$("client").focus();return}
+ if(!categories.some(c=>d[c.id].length)){alert("Agrega al menos un concepto a la proforma.");return}
+ const capacities={labor:3,parts:10,lubricants:6,third:3};
+ for(const c of categories){
+  if(d[c.id].length>capacities[c.id]){
+   alert("La plantilla original admite hasta "+capacities[c.id]+" conceptos en "+c.title+". Actualmente hay "+d[c.id].length+".");
+   return;
+  }
+ }
+ if(!signedInUser){alert("Inicia sesión para generar la proforma.");return}
  const t=totals();
- $("pNumber").textContent="N.º "+String(d.number).padStart(6,"0");
- $("pClient").textContent=`Cliente: ${d.client}\nNúmero: ${d.clientNumber}\nPlaca: ${d.plate}\nMarca: ${d.make}`;
- $("pVehicle").textContent=`Documento: ${d.docCode}\nModelo: ${d.model}\nFecha: ${d.date}\nKms/Hrs: ${d.km}\nN.º O.T.: ${d.ot}\n${d.payment}`;
- $("pLabor").innerHTML=makePrintRows("MANO DE OBRA",d.labor,t.labor);
- $("pParts").innerHTML=makePrintRows("REPUESTOS Y MATERIALES",d.parts,t.parts);
- $("pLubricants").innerHTML=makePrintRows("LUBRICANTES Y MATERIALES",d.lubricants,t.lubricants);
- $("pThird").innerHTML=makePrintRows("TRABAJOS TERCEROS",d.third,t.third);
- $("pObservations").textContent=d.observations;
- $("pSubtotal").textContent=money(t.sub);
- $("pDiscount").textContent=money(t.discount);
- $("pTotal").textContent=money(t.total);
- $("pWords").textContent="Son: "+numberWords(t.total)+" Bs.";
- $("pReceived").textContent=d.received||"Recibido Conforme";
- $("pName").textContent=d.received||"________________________";
- $("pCI").textContent=d.ci||"________________________";
- window.print();
+ d.number=val("docNumber");
+ d.discount=t.discount;
+ d.total=t.total;
+ pdfGenerationPending=true;
+ setCatalogStatus("Generando PDF con la plantilla original de HOJA 1…");
+ const frameName="renuevoPdfFrame_"+Date.now();
+ const iframe=document.createElement("iframe");
+ iframe.name=frameName;
+ iframe.style.display="none";
+ document.body.appendChild(iframe);
+ const form=document.createElement("form");
+ form.method="POST";
+ form.action=APPS_SCRIPT_URL;
+ form.target=frameName;
+ form.style.display="none";
+ const input=document.createElement("input");
+ input.type="hidden";
+ input.name="payload";
+ input.value=JSON.stringify(d);
+ form.appendChild(input);
+ document.body.appendChild(form);
+ let finished=false;
+ const cleanup=()=>{
+  if(finished)return;
+  finished=true;
+  pdfGenerationPending=false;
+  window.removeEventListener("message",onMessage);
+  form.remove();
+  iframe.remove();
+ };
+ const onMessage=(event)=>{
+  if(event.source!==iframe.contentWindow||!event.data||event.data.type!=="renuevo-template-pdf")return;
+  cleanup();
+  if(!event.data.success){
+   setCatalogStatus("No se pudo generar el PDF: "+(event.data.error||"Error desconocido"),"error");
+   alert("No se pudo generar el PDF desde HOJA 1:\n"+(event.data.error||"Error desconocido"));
+   return;
+  }
+  try{
+   const binary=atob(event.data.base64);
+   const bytes=new Uint8Array(binary.length);
+   for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+   const blob=new Blob([bytes],{type:"application/pdf"});
+   const url=URL.createObjectURL(blob);
+   const link=document.createElement("a");
+   link.href=url;
+   link.download=event.data.filename||"PROFORMA_TALLER_RENUEVO.pdf";
+   document.body.appendChild(link);
+   link.click();
+   link.remove();
+   setTimeout(()=>URL.revokeObjectURL(url),60000);
+   setCatalogStatus("PDF generado desde la plantilla original de HOJA 1.","ok");
+  }catch(error){
+   setCatalogStatus("El PDF llegó, pero no se pudo preparar la descarga.","error");
+   alert("No se pudo abrir el PDF: "+(error.message||error));
+  }
+ };
+ window.addEventListener("message",onMessage);
+ form.submit();
+ setTimeout(()=>{
+  if(!finished){
+   cleanup();
+   setCatalogStatus("No hubo respuesta del generador. Verifica que hayas actualizado y desplegado Codigo.gs.","error");
+   alert("No recibimos respuesta de Apps Script. Comprueba que el nuevo Codigo.gs esté implementado como una nueva versión del despliegue.");
+  }
+ },120000);
 }
 function numberWords(amount){
  const u=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
