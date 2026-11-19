@@ -318,14 +318,17 @@ async function loadCatalog(){
  setCatalogStatus("Conectando con el catálogo de Google Sheets…");
  try{
   const data=await requestCatalogJsonp();
-  catalog=(Array.isArray(data)?data:(data.items||data.catalogo||data.data||[])).map(x=>({
-   code:String(x.codigo??x.code??x.CODIGO??"").trim(),
-   description:String(x.descripcion??x.description??x.DESCRIPCION??"").trim(),
-   unit:String(x.unidad??x.unit??x.UNIDAD??"").trim(),
-   section:normalizeSection(x.seccion??x.section??x.SECCION??x.categoria??x.category),
-   price:Number(x.precio??x.price??x.PRECIO)||0
+  const rows=Array.isArray(data)?data:(data.items||data.articulos||data.catalogo||data.data||data.rows||data.result||data.products||[]);
+  catalog=(Array.isArray(rows)?rows:[]).map(x=>({
+   code:String(x.codigo??x.code??x.CODIGO??x.codigo_articulo??x.id??"").trim(),
+   description:String(x.descripcion??x.description??x.DESCRIPCION??x.nombre??x.name??"").trim(),
+   unit:String(x.unidad??x.unit??x.UNIDAD??x.unidad_medida??"").trim(),
+   section:normalizeSection(x.seccion??x.section??x.SECCION??x.sección??x.categoria??x.category??x.tipo??""),
+   price:Number(x.precio??x.price??x.PRECIO??x.costo??0)||0
   })).filter(x=>x.code&&x.description&&x.section);
-  catalogLoaded=true;setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok");
+  catalogLoaded=true;
+  if(catalog.length){setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok")}
+  else{setCatalogStatus("Se recibió respuesta de Apps Script, pero no se reconoció la lista de artículos o sus secciones. Revisar formato del catálogo.","error");console.warn("Respuesta recibida del catálogo:",data)}
  }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo leer el catálogo. Revisaremos la respuesta JSONP de Apps Script.","error");console.error("Catálogo:",error)}
 }
 function showSuggestions(type,tr,query){
