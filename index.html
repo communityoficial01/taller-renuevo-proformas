@@ -251,7 +251,7 @@ const ids=["docCode","date","payment","client","clientNumber","plate","make","mo
 const money=n=>(Number(n)||0).toLocaleString("es-BO",{minimumFractionDigits:2,maximumFractionDigits:2});
 const val=id=>$(id).value.trim();
 function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function nextNumber(){return String(Math.max(0,...quotes.map(q=>Number(q.number)||0))+1).padStart(6,"0")}
+function nextNumber(){return "000001"}
 function makeSections(){
  $("sections").innerHTML=categories.map(c=>`
  <section class="card">
@@ -316,67 +316,125 @@ function collect(){
  categories.forEach(c=>data[c.id]=getRows(c.id));
  return data;
 }
-function saveQuote(){
+async function saveQuote(){
  const data=collect();
  if(!data.client){alert("Ingresa el nombre del cliente antes de guardar.");$("client").focus();return}
  if(!categories.some(c=>data[c.id].length)){alert("Agrega al menos un concepto a la proforma.");return}
- if(currentId){
-  const q=quotes.find(x=>x.id===currentId);
-  if(q){
-   q.versions=q.versions||[];
-   q.versions.push({savedAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(q.data))});
-   q.data=data;q.updatedAt=new Date().toISOString();
+ try{
+  const t=totals();
+  const row={
+   org_id:ORGANIZATION_ID,proforma_number:Number(data.number)||null,
+   issue_date:data.date||new Date().toISOString().slice(0,10),
+   status:"borrador",currency:"BOB",subtotal:t.sub,discount:t.discount,total:t.total,
+   observations:data.observations||null,created_by:signedInUser.id,
+   service_number:data.number, payment_condition:data.payment,
+   client_name:data.client,client_phone:data.clientNumber||null,
+   document_code:data.docCode||null,vehicle_plate:data.plate||null,
+   vehicle_brand:data.make||null,vehicle_model:data.model||null,
+   vehicle_km:Number(data.km)||null,prepared_by_name:data.prepared||null,
+   approved_by_name:data.authorized||null,received_by_name:data.received||null,
+   received_identity_number:data.ci||null
+  };
+  let proformaId=currentId;
+  if(currentId){
+   const {data:old,error:oldError}=await supabaseClient.from("proformas").select("*").eq("id",currentId).eq("org_id",ORGANIZATION_ID).single();
+   if(oldError) throw oldError;
+   const {data:oldItems,error:itemsError}=await supabaseClient.from("proforma_items").select("*").eq("proforma_id",currentId);
+   if(itemsError) throw itemsError;
+   const {data:versions,error:versionsError}=await supabaseClient.from("proforma_versions").select("version_number").eq("proforma_id",currentId).order("version_number",{ascending:false}).limit(1);
+   if(versionsError) throw versionsError;
+   const snapshot={proforma:old,items:oldItems||[]};
+   const {error:versionError}=await supabaseClient.from("proforma_versions").insert({
+    org_id:ORGANIZATION_ID,proforma_id:currentId,
+    version_number:(versions?.[0]?.version_number||0)+1,snapshot,created_by:signedInUser.id
+   });
+   if(versionError) throw versionError;
+   const {error:updateError}=await supabaseClient.from("proformas").update(row).eq("id",currentId).eq("org_id",ORGANIZATION_ID);
+   if(updateError) throw updateError;
+   const {error:deleteError}=await supabaseClient.from("proforma_items").delete().eq("proforma_id",currentId);
+   if(deleteError) throw deleteError;
+  }else{
+   delete row.proforma_number;
+   const {data:created,error:createError}=await supabaseClient.from("proformas").insert(row).select("id,proforma_number").single();
+   if(createError) throw createError;
+   proformaId=created.id;
+   data.number=created.proforma_number;
+   $("docNumber").value=String(created.proforma_number).padStart(6,"0");
   }
- }else{
-  const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now()));
-  quotes.push({id,number:data.number,data,versions:[],createdAt:new Date().toISOString()});
-  currentId=id;
- }
- localStorage.setItem(KEY,JSON.stringify(quotes));
- $("pageTitle").textContent="Proforma "+String(data.number).padStart(6,"0");
- alert("Proforma guardada en este navegador.");
- renderHistory();
+  const items=[];
+  categories.forEach(c=>data[c.id].forEach((item,index)=>items.push({
+   org_id:ORGANIZATION_ID,proforma_id:proformaId,section:c.id,
+   code:item.code||null,description:item.description||"",quantity:item.qty,
+   unit:item.unit||null,unit_price:item.price,line_total:item.qty*item.price,position:index
+  })));
+  if(items.length){
+   const {error:itemError}=await supabaseClient.from("proforma_items").insert(items);
+   if(itemError) throw itemError;
+  }
+  currentId=proformaId;
+  $("pageTitle").textContent="Proforma "+String(data.number).padStart(6,"0");
+  alert("Proforma guardada correctamente en la nube.");
+  await renderHistory();
+ }catch(err){console.error(err);alert("No se pudo guardar la proforma: "+(err.message||"Error de conexión"))}
 }
-function newQuote(){
- currentId=null;
- $("pageTitle").textContent="Nueva proforma";
- $("docNumber").value=nextNumber();
- $("docCode").value="STNRM/00-"+nextNumber();
- $("date").value=new Date().toISOString().slice(0,10);
+async function newQuote(){
+ currentId=null;$("pageTitle").textContent="Nueva proforma";
+ $("docCode").value="";$("date").value=new Date().toISOString().slice(0,10);
  ids.filter(id=>!["docCode","date","payment","discount"].includes(id)).forEach(id=>$(id).value="");
  $("payment").value="CONTADO";$("discount").value="0";
  categories.forEach(c=>$(c.id+"Rows").innerHTML="");
  categories.forEach(c=>addLine(c.id));
+ try{
+  const {data,error}=await supabaseClient.rpc("next_proforma_number",{p_org_id:ORGANIZATION_ID});
+  if(error) throw error;
+  $("docNumber").value=String(data).padStart(6,"0");
+  $("docCode").value="STNRM/00-"+String(data).padStart(6,"0");
+ }catch(err){$("docNumber").value="";console.error(err);alert("No se pudo obtener el siguiente número: "+err.message)}
  calculate();hideHistory();
 }
-function loadQuote(id){
- const q=quotes.find(x=>x.id===id);if(!q)return;
- currentId=id;const d=q.data;
- $("pageTitle").textContent="Editar proforma "+String(d.number).padStart(6,"0");
- $("docNumber").value=String(d.number).padStart(6,"0");
- ids.forEach(k=>$(k).value=d[k]??"");
- categories.forEach(c=>{
-  $(c.id+"Rows").innerHTML="";
-  (d[c.id]||[]).forEach(row=>addLine(c.id,row));
-  if(!(d[c.id]||[]).length)addLine(c.id);
- });
- calculate();hideHistory();window.scrollTo({top:0,behavior:"smooth"});
+async function loadQuote(id){
+ try{
+  const {data:q,error}=await supabaseClient.from("proformas").select("*").eq("id",id).eq("org_id",ORGANIZATION_ID).single();
+  if(error) throw error;
+  const {data:items,error:itemError}=await supabaseClient.from("proforma_items").select("*").eq("proforma_id",id).order("position");
+  if(itemError) throw itemError;
+  currentId=id;
+  const d={
+   number:q.proforma_number,docCode:q.document_code||"",date:q.issue_date||"",
+   payment:q.payment_condition||"CONTADO",client:q.client_name||"",clientNumber:q.client_phone||"",
+   plate:q.vehicle_plate||"",make:q.vehicle_brand||"",model:q.vehicle_model||"",km:q.vehicle_km||"",
+   ot:q.service_number||"",observations:q.observations||"",discount:q.discount||0,
+   prepared:q.prepared_by_name||"",authorized:q.approved_by_name||"",received:q.received_by_name||"",
+   ci:q.received_identity_number||""
+  };
+  $("pageTitle").textContent="Editar proforma "+String(d.number).padStart(6,"0");
+  $("docNumber").value=String(d.number).padStart(6,"0");
+  ids.forEach(k=>$(k).value=d[k]??"");
+  categories.forEach(c=>{
+   $(c.id+"Rows").innerHTML="";
+   (items||[]).filter(x=>x.section===c.id).forEach(x=>addLine(c.id,{code:x.code||"",description:x.description||"",qty:x.quantity,unit:x.unit||"",price:x.unit_price}));
+   if(!(items||[]).some(x=>x.section===c.id)) addLine(c.id);
+  });
+  calculate();hideHistory();window.scrollTo({top:0,behavior:"smooth"});
+ }catch(err){alert("No se pudo abrir la proforma: "+err.message)}
 }
 function showHistory(){renderHistory();$("historyPanel").classList.remove("hidden");$("historyPanel").scrollIntoView({behavior:"smooth"})}
 function hideHistory(){$("historyPanel").classList.add("hidden")}
-function renderHistory(){
- if(!quotes.length){$("historyList").innerHTML="<p class='hint'>Todavía no hay proformas guardadas.</p>";return}
- $("historyList").innerHTML=[...quotes].sort((a,b)=>b.number-a.number).map(q=>{
-  const t=categories.reduce((s,c)=>s+sumRows(q.data[c.id]||[]),0)-(Number(q.data.discount)||0);
-  return `<div class="history-item"><div><strong>Proforma ${String(q.number).padStart(6,"0")} · ${safe(q.data.client)}</strong><small>${safe(q.data.date)} · Total: Bs ${money(Math.max(0,t))} · Versiones anteriores: ${(q.versions||[]).length}</small></div><div class="history-actions"><button class="btn secondary" onclick="loadQuote('${q.id}')">Abrir</button><button class="btn danger" onclick="showVersions('${q.id}')">Versiones</button></div></div>`;
- }).join("");
+async function renderHistory(){
+ try{
+  const {data,error}=await supabaseClient.from("proformas").select("id,proforma_number,client_name,issue_date,total,updated_at").eq("org_id",ORGANIZATION_ID).order("proforma_number",{ascending:false});
+  if(error) throw error;
+  if(!data?.length){$("historyList").innerHTML="<p class='hint'>Todavía no hay proformas guardadas.</p>";return}
+  $("historyList").innerHTML=data.map(q=>`<div class="history-item"><div><strong>Proforma ${String(q.proforma_number).padStart(6,"0")} · ${safe(q.client_name)}</strong><small>${safe(q.issue_date)} · Total: Bs ${money(q.total)}</small></div><div class="history-actions"><button class="btn secondary" onclick="loadQuote('${q.id}')">Abrir</button><button class="btn danger" onclick="showVersions('${q.id}')">Versiones</button></div></div>`).join("");
+ }catch(err){$("historyList").innerHTML="<p class='hint'>Error al cargar el historial: "+safe(err.message)+"</p>"}
 }
-function showVersions(id){
- const q=quotes.find(x=>x.id===id);
- if(!q)return;
- const vs=q.versions||[];
- if(!vs.length){alert("Esta proforma todavía no tiene versiones anteriores.");return}
- alert("Se han conservado "+vs.length+" versión(es) anterior(es) de esta proforma.");
+async function showVersions(id){
+ try{
+  const {data,error}=await supabaseClient.from("proforma_versions").select("version_number,created_at").eq("proforma_id",id).order("version_number",{ascending:false});
+  if(error) throw error;
+  if(!data?.length){alert("Esta proforma todavía no tiene versiones anteriores.");return}
+  alert("Versiones anteriores: "+data.map(v=>"#"+v.version_number+" ("+new Date(v.created_at).toLocaleString("es-BO")+")").join("\n"));
+ }catch(err){alert("No se pudieron consultar las versiones: "+err.message)}
 }
 function makePrintRows(title,rows,total){
  let html=`<tr class="section"><td colspan="6">${title}</td></tr>`;
@@ -465,6 +523,8 @@ async function loginUser(event){
   const {data:{user},error:userError}=await supabaseClient.auth.getUser();
   if(userError || !user) throw new Error("No se pudo validar la sesión.");
   await validateMembership(user.id);
+  await newQuote();
+  await renderHistory();
  }catch(err){
   await supabaseClient.auth.signOut();
   errorBox.textContent=err.message||"No se pudo iniciar sesión.";
@@ -481,7 +541,7 @@ async function logoutUser(){
 async function restoreSession(){
  try{
   const {data:{session}}=await supabaseClient.auth.getSession();
-  if(session?.user) await validateMembership(session.user.id);
+  if(session?.user){await validateMembership(session.user.id);await newQuote();await renderHistory();}
  }catch(err){
   await supabaseClient.auth.signOut();
   document.body.classList.remove("authenticated");
@@ -490,7 +550,6 @@ async function restoreSession(){
 $("loginForm").addEventListener("submit",loginUser);
 
 makeSections();
-newQuote();
 restoreSession();
 </script>
 </body>
