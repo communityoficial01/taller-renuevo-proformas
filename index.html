@@ -160,6 +160,7 @@ body:not(.authenticated) .login-screen{display:flex}
  </section>
 
  <div id="sections"></div>
+ <div class="catalog-status" id="catalogStatus">Preparando conexión con Google Sheets…</div>
 
  <section class="card">
   <h2>Observaciones y resumen</h2>
@@ -261,7 +262,7 @@ function makeSections(){
  <section class="card">
   <div class="section-title"><h2>${c.title}</h2><button class="btn secondary" onclick="addLine('${c.id}')">+ ${c.button}</button></div>
   <div class="table-wrap"><table class="line-table">
-   <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th><th></th></tr></thead>
+   <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN / BUSCAR EN CATÁLOGO</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th><th></th></tr></thead>
    <tbody id="${c.id}Rows"></tbody>
   </table></div>
  </section>`).join("");
