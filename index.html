@@ -86,15 +86,39 @@ button,input,select,textarea{font:inherit}
  .signline{border-top:1px solid #333;padding-top:5px;margin:0 8px}
  .namefields{text-align:left;padding-left:22px;line-height:2}
 }
+
+/* Acceso seguro */
+body:not(.authenticated)>header,body:not(.authenticated)>main{display:none!important}
+.login-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:22px;background:linear-gradient(135deg,#142b45,#1e456c)}
+body:not(.authenticated) .login-screen{display:flex}
+.login-card{width:min(420px,100%);background:#fff;border-radius:16px;padding:30px;box-shadow:0 18px 50px #07172755}
+.login-card h1{margin:0 0 8px;color:var(--navy);font-size:22px}
+.login-card p{margin:0 0 22px;color:var(--muted);font-size:13px}
+.login-card .field{margin:14px 0}
+.login-card .btn{width:100%;margin-top:8px}
+.login-error{color:#a52b2b;background:#fff0f0;border-radius:7px;padding:10px;font-size:13px;margin-top:12px}
+.login-card input{width:100%;border:1px solid #ccd6e1;border-radius:7px;padding:12px}
+.logout{background:#e4ebf2!important;color:var(--navy)!important}
+
 </style>
 </head>
 <body>
+<section class="login-screen" id="loginScreen">
+ <form class="login-card" id="loginForm">
+  <h1>TALLER RENUEVO TRUCKS</h1>
+  <p>Ingresa con tu usuario y contraseña para acceder al sistema de proformas.</p>
+  <div class="field"><label for="loginUsername">USUARIO</label><input id="loginUsername" autocomplete="username" required minlength="3" placeholder="Tu nombre de usuario"></div>
+  <div class="field"><label for="loginPassword">CONTRASEÑA</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
+  <button class="btn primary" id="loginButton" type="submit">Ingresar al sistema</button>
+  <div id="loginError" class="login-error hidden" role="alert"></div>
+ </form>
+</section>
 <header class="topbar">
  <div class="brand">
   <strong>TALLER RENUEVO TRUCKS</strong>
   <small>Gestión de proformas y servicios</small>
  </div>
- <button onclick="newQuote()">+ Nueva proforma</button>
+ <div class="actions"><button class="logout" onclick="logoutUser()">Cerrar sesión</button><button onclick="newQuote()">+ Nueva proforma</button></div>
 </header>
 
 <main class="layout">
@@ -210,6 +234,7 @@ button,input,select,textarea{font:inherit}
  </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const KEY="renuevo_proformas_v3";
 let quotes=JSON.parse(localStorage.getItem(KEY)||"[]");
@@ -401,8 +426,72 @@ function numberWords(amount){
  const bol=Math.floor(amount),cent=Math.round((amount-bol)*100);
  return words(bol).replace(/\buno\b/g,"un")+" "+String(cent).padStart(2,"0")+"/100";
 }
+
+const SUPABASE_URL="https://yvltsziudtwxnmvaigaa.supabase.co";
+const SUPABASE_PUBLIC_KEY="sb_publishable_-2RYaqD7kW02Z3sM59BLvA_5vKR3c02";
+const ORGANIZATION_ID="ccedaa9a-22e0-4e22-a3a7-832cf11ca646";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
+let signedInUser=null;
+async function validateMembership(userId){
+ const {data,error}=await supabaseClient.from("org_memberships")
+  .select("id,role,active").eq("org_id",ORGANIZATION_ID)
+  .eq("user_id",userId).eq("active",true).maybeSingle();
+ if(error) throw new Error("No se pudo verificar el acceso a la organización: "+error.message);
+ if(!data) throw new Error("Este usuario no tiene acceso activo a TALLER RENUEVO TRUCKS.");
+ const {data:profile,error:profileError}=await supabaseClient.from("profiles")
+  .select("active,full_name,username").eq("id",userId).maybeSingle();
+ if(profileError) throw new Error("No se pudo verificar el perfil: "+profileError.message);
+ if(!profile || !profile.active) throw new Error("El perfil de este usuario está inactivo.");
+ signedInUser={id:userId,role:data.role,profile};
+ document.body.classList.add("authenticated");
+}
+async function loginUser(event){
+ event.preventDefault();
+ const button=$("loginButton"),errorBox=$("loginError");
+ errorBox.classList.add("hidden");button.disabled=true;button.textContent="Verificando acceso...";
+ try{
+  const username=$("loginUsername").value.trim();
+  const password=$("loginPassword").value;
+  const response=await fetch(SUPABASE_URL+"/functions/v1/login-usuario",{
+   method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLIC_KEY},
+   body:JSON.stringify({username,password})
+  });
+  const result=await response.json();
+  if(!response.ok || !result.success || !result.session) throw new Error(result.error||"No se pudo iniciar sesión.");
+  const {error}=await supabaseClient.auth.setSession({
+   access_token:result.session.access_token,refresh_token:result.session.refresh_token
+  });
+  if(error) throw error;
+  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
+  if(userError || !user) throw new Error("No se pudo validar la sesión.");
+  await validateMembership(user.id);
+ }catch(err){
+  await supabaseClient.auth.signOut();
+  errorBox.textContent=err.message||"No se pudo iniciar sesión.";
+  errorBox.classList.remove("hidden");
+ }finally{
+  button.disabled=false;button.textContent="Ingresar al sistema";
+ }
+}
+async function logoutUser(){
+ await supabaseClient.auth.signOut();
+ signedInUser=null;document.body.classList.remove("authenticated");
+ $("loginPassword").value="";
+}
+async function restoreSession(){
+ try{
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(session?.user) await validateMembership(session.user.id);
+ }catch(err){
+  await supabaseClient.auth.signOut();
+  document.body.classList.remove("authenticated");
+ }
+}
+$("loginForm").addEventListener("submit",loginUser);
+
 makeSections();
 newQuote();
+restoreSession();
 </script>
 </body>
 </html>
