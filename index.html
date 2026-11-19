@@ -285,7 +285,7 @@ function addLine(type,data={}){
  body.appendChild(tr);calculate();
 }
 function normalizeSection(value){
- const s=String(value||"").toUpperCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"");
+ const s=String(value||"").toUpperCase().normalize("NFD").replace(/\p{M}/gu,"");
  if(s.includes("MANO")||s==="LABOR")return "labor";
  if(s.includes("REPUEST")||s==="PARTS")return "parts";
  if(s.includes("LUBRIC")||s==="LUBRICANTS")return "lubricants";
