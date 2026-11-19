@@ -285,7 +285,7 @@ function addLine(type,data={}){
  body.appendChild(tr);calculate();
 }
 function normalizeSection(value){
- const s=String(value||"").toUpperCase().normalize("NFD").replace(/\p{M}/gu,"");
+ const s=String(value??"").trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
  if(s.includes("MANO")||s==="LABOR")return "labor";
  if(s.includes("REPUEST")||s==="PARTS")return "parts";
  if(s.includes("LUBRIC")||s==="LUBRICANTS")return "lubricants";
@@ -318,18 +318,32 @@ async function loadCatalog(){
  setCatalogStatus("Conectando con el catálogo de Google Sheets…");
  try{
   const data=await requestCatalogJsonp();
-  const rows=Array.isArray(data)?data:(data.items||data.articulos||data.catalogo||data.data||data.rows||data.result||data.products||[]);
-  catalog=(Array.isArray(rows)?rows:[]).map(x=>({
-   code:String(x.codigo??x.code??x.CODIGO??x.codigo_articulo??x.id??"").trim(),
-   description:String(x.descripcion??x.description??x.DESCRIPCION??x.nombre??x.name??"").trim(),
-   unit:String(x.unidad??x.unit??x.UNIDAD??x.unidad_medida??"").trim(),
-   section:normalizeSection(x.seccion??x.section??x.SECCION??x.sección??x.categoria??x.category??x.tipo??""),
-   price:Number(x.precio??x.price??x.PRECIO??x.costo??0)||0
-  })).filter(x=>x.code&&x.description&&x.section);
-  catalogLoaded=true;
-  if(catalog.length){setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok")}
-  else{setCatalogStatus("Se recibió respuesta de Apps Script, pero no se reconoció la lista de artículos o sus secciones. Revisar formato del catálogo.","error");console.warn("Respuesta recibida del catálogo:",data)}
- }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo leer el catálogo. Revisaremos la respuesta JSONP de Apps Script.","error");console.error("Catálogo:",error)}
+  let rows=Array.isArray(data)?data:(data&&typeof data==="object"?(data.items||data.articulos||data.catalogo||data.data||data.rows||data.result||data.products||[]):[]);
+  if(typeof rows==="string"){try{rows=JSON.parse(rows)}catch(_){rows=[]}}
+  if(!Array.isArray(rows))rows=[];
+  const mapped=rows.map(x=>{
+   x=x||{};
+   const sectionValue=x.seccion??x.section??x.SECCION??x.sección??x.categoria??x.category??x.tipo??"";
+   return {
+    code:String(x.codigo??x.code??x.CODIGO??x.codigo_articulo??x.id??"").trim(),
+    description:String(x.descripcion??x.description??x.DESCRIPCION??x.nombre??x.name??"").trim(),
+    unit:String(x.unidad??x.unit??x.UNIDAD??x.unidad_medida??"").trim(),
+    section:normalizeSection(sectionValue),
+    price:Number(x.precio??x.price??x.PRECIO??x.costo??0)||0,
+    rawSection:String(sectionValue??"")
+   };
+  });
+  catalog=mapped.filter(x=>x.code&&x.description&&x.section);
+  catalogLoaded=catalog.length>0;
+  if(catalogLoaded){
+   setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok");
+  }else{
+   const sample=mapped[0];
+   const detail=Array.isArray(data)?"respuesta tipo lista ("+data.length+" filas)":(data===null?"respuesta vacía":"respuesta tipo "+typeof data);
+   setCatalogStatus("Apps Script respondió, pero no se pudieron validar los artículos. "+detail+(sample?"; campos: "+Object.keys(rows[0]||{}).join(", ")+"; sección recibida: "+(sample.rawSection||"(vacía)"):""),"error");
+   console.warn("Diagnóstico catálogo:",{data,rows,mapped});
+  }
+ }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo leer el catálogo: "+(error.message||"Error JSONP"),"error");console.error("Catálogo:",error)}
 }
 function showSuggestions(type,tr,query){
  const box=tr.querySelector(".suggestions"),q=String(query||"").trim().toLowerCase();
