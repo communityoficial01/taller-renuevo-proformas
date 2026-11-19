@@ -100,6 +100,8 @@ body:not(.authenticated) .login-screen{display:flex}
 .login-card input{width:100%;border:1px solid #ccd6e1;border-radius:7px;padding:12px}
 .logout{background:#e4ebf2!important;color:var(--navy)!important}
 
+
+.catalog-cell{position:relative;min-width:210px}.suggestions{position:absolute;z-index:30;left:0;right:0;top:100%;background:#fff;border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 20px #142b4520;max-height:230px;overflow:auto}.suggestion{display:block;width:100%;border:0;background:#fff;text-align:left;padding:9px 10px;cursor:pointer;border-bottom:1px solid #edf0f4;color:#263445}.suggestion:hover{background:#edf4fa}.suggestion strong{display:block;color:#142b45;font-size:12px}.suggestion small{display:block;color:#64748b;margin-top:3px}.catalog-status{font-size:12px;color:#64748b;margin:10px 0}.catalog-status.ok{color:#18734b}.catalog-status.error{color:#a52b2b}
 </style>
 </head>
 <body>
@@ -211,7 +213,7 @@ body:not(.authenticated) .login-screen{display:flex}
   <div id="pVehicle"></div>
  </div>
  <table class="print-detail">
-  <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th></tr></thead>
+  <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN / BUSCAR EN CATÁLOGO</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th></tr></thead>
   <tbody id="pLabor"></tbody>
   <tbody id="pParts"></tbody>
   <tbody id="pLubricants"></tbody>
@@ -237,6 +239,8 @@ body:not(.authenticated) .login-screen{display:flex}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const KEY="renuevo_proformas_v3";
+const CATALOG_URL="https://script.google.com/macros/s/AKfycbzGOU4A-6JZ6L5nGz4nEKI5aou-UwMaxg_Ee9tEBZm5XR8EudrqSx4xYMw3DL1MSrx0/exec";
+let catalog=[],catalogLoaded=false;
 let quotes=JSON.parse(localStorage.getItem(KEY)||"[]");
 let currentId=null;
 const $=id=>document.getElementById(id);
@@ -265,20 +269,60 @@ function makeSections(){
 function addLine(type,data={}){
  const body=$(type+"Rows"),tr=document.createElement("tr");
  tr.innerHTML=`<td><input class="code" placeholder="Código"></td>
- <td><input class="description" placeholder="Descripción"></td>
+ <td class="catalog-cell"><input class="description" placeholder="Buscar por código o descripción" autocomplete="off"><div class="suggestions hidden"></div></td>
  <td><input class="qty" type="number" min="0" step="0.01" value="1"></td>
- <td><input class="unit" placeholder="UNID."></td>
+ <td><input class="unit" placeholder="Unidad"></td>
  <td><input class="price" type="number" min="0" step="0.01" value="0"></td>
- <td class="amount">0.00</td>
- <td><button type="button" class="btn danger" style="padding:6px 9px">×</button></td>`;
- fields.forEach((c,i)=>{
-  const el=tr.querySelector("."+c);
-  el.value=data[c]??(i===2?1:i===4?0:"");
-  el.addEventListener("input",calculate);
- });
+ <td class="amount">0.00</td><td><button type="button" class="btn danger" style="padding:6px 9px">×</button></td>`;
+ fields.forEach((c,i)=>{const el=tr.querySelector("."+c);el.value=data[c]??(i===2?1:i===4?0:"");if(c==="qty"||c==="price")el.addEventListener("input",calculate)});
+ const code=tr.querySelector(".code"),desc=tr.querySelector(".description");
+ code.addEventListener("input",()=>showSuggestions(type,tr,code.value));
+ desc.addEventListener("input",()=>showSuggestions(type,tr,desc.value));
+ code.addEventListener("focus",()=>{if(code.value)showSuggestions(type,tr,code.value)});
+ desc.addEventListener("focus",()=>{if(desc.value)showSuggestions(type,tr,desc.value)});
  tr.querySelector("button").onclick=()=>{tr.remove();calculate()};
  body.appendChild(tr);calculate();
 }
+function normalizeSection(value){
+ const s=String(value||"").toUpperCase().normalize("NFD").replace(/[\\u0300-\\u036f]/g,"");
+ if(s.includes("MANO")||s==="LABOR")return "labor";
+ if(s.includes("REPUEST")||s==="PARTS")return "parts";
+ if(s.includes("LUBRIC")||s==="LUBRICANTS")return "lubricants";
+ if(s.includes("TERCER")||s==="THIRD")return "third";
+ return "";
+}
+function setCatalogStatus(message,kind=""){const el=$("catalogStatus");if(el){el.textContent=message;el.className="catalog-status "+kind}}
+async function loadCatalog(){
+ setCatalogStatus("Conectando con el catálogo de Google Sheets…");
+ try{
+  const response=await fetch(CATALOG_URL,{method:"GET",cache:"no-store"});
+  if(!response.ok)throw new Error("Respuesta HTTP "+response.status);
+  const data=await response.json();
+  catalog=(Array.isArray(data)?data:(data.items||data.catalogo||data.data||[])).map(x=>({
+   code:String(x.codigo??x.code??x.CODIGO??"").trim(),
+   description:String(x.descripcion??x.description??x.DESCRIPCION??"").trim(),
+   unit:String(x.unidad??x.unit??x.UNIDAD??"").trim(),
+   section:normalizeSection(x.seccion??x.section??x.SECCION??x.categoria??x.category),
+   price:Number(x.precio??x.price??x.PRECIO)||0
+  })).filter(x=>x.code&&x.description&&x.section);
+  catalogLoaded=true;setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok");
+ }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo leer el catálogo. Verificaremos el formato de respuesta de Apps Script.","error");console.error("Catálogo:",error)}
+}
+function showSuggestions(type,tr,query){
+ const box=tr.querySelector(".suggestions"),q=String(query||"").trim().toLowerCase();
+ if(!q||!catalogLoaded){box.classList.add("hidden");box.innerHTML="";return}
+ const matches=catalog.filter(item=>item.section===type&&(item.code.toLowerCase().includes(q)||item.description.toLowerCase().includes(q))).slice(0,12);
+ if(!matches.length){box.innerHTML="<div class='suggestion'>Sin coincidencias en esta sección</div>";box.classList.remove("hidden");return}
+ box.innerHTML=matches.map(item=>"<button type='button' class='suggestion'><strong>"+safe(item.code)+" · "+safe(item.description)+"</strong><small>Unidad: "+safe(item.unit)+(item.price?" · Precio sugerido: Bs "+money(item.price):"")+"</small></button>").join("");
+ [...box.querySelectorAll("button")].forEach((button,i)=>button.addEventListener("click",()=>selectCatalogItem(tr,matches[i])));
+ box.classList.remove("hidden");
+}
+function selectCatalogItem(tr,item){
+ tr.querySelector(".code").value=item.code;tr.querySelector(".description").value=item.description;
+ tr.querySelector(".unit").value=item.unit;if(item.price>0)tr.querySelector(".price").value=item.price;
+ tr.querySelector(".suggestions").classList.add("hidden");calculate();
+}
+document.addEventListener("click",e=>{document.querySelectorAll(".suggestions:not(.hidden)").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.add("hidden")})});
 function getRows(type){
  return [...$(type+"Rows").querySelectorAll("tr")].map(tr=>{
   const get=c=>tr.querySelector("."+c).value;
@@ -550,6 +594,7 @@ async function restoreSession(){
 $("loginForm").addEventListener("submit",loginUser);
 
 makeSections();
+loadCatalog();
 restoreSession();
 </script>
 </body>
