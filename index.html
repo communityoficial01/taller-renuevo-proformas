@@ -365,8 +365,8 @@ document.addEventListener("click",e=>{document.querySelectorAll(".suggestions:no
 function getRows(type){
  return [...$(type+"Rows").querySelectorAll("tr")].map(tr=>{
   const get=c=>tr.querySelector("."+c).value;
-  return {code:get("code"),description:get("description"),qty:Number(get("qty"))||0,unit:get("unit"),price:Number(get("price"))||0};
- });
+  return {code:get("code").trim(),description:get("description").trim(),qty:Number(get("qty"))||0,unit:get("unit").trim(),price:Number(get("price"))||0};
+ }).filter(row=>row.code||row.description||row.unit||row.price>0);
 }
 function sumRows(rows){return rows.reduce((s,r)=>s+r.qty*r.price,0)}
 function totals(){
