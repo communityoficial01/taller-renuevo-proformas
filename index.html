@@ -572,7 +572,7 @@ function printQuote(){
   iframe.remove();
  };
  const onMessage=(event)=>{
-  if(event.source!==iframe.contentWindow||!event.data||event.data.type!=="renuevo-template-pdf")return;
+  if(!event.data||event.data.type!=="renuevo-template-pdf")return;
   cleanup();
   if(!event.data.success){
    setCatalogStatus("No se pudo generar el PDF: "+(event.data.error||"Error desconocido"),"error");
