@@ -413,7 +413,11 @@ async function syncCatalogInventory(){
    section:item.section==="parts"?"REPUESTOS Y MATERIALES":"LUBRICANTES Y MATERIALES",
    price:Number(item.price)||0
   }));
- if(!inventoryItems.length) return;
+ if(!inventoryItems.length){
+  const sectionCounts=catalog.reduce((acc,item)=>{acc[item.section]=(acc[item.section]||0)+1;return acc;},{});
+  setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos, pero ninguno está clasificado como repuesto o lubricante. Secciones detectadas: "+JSON.stringify(sectionCounts),"error");
+  return;
+ }
  inventorySyncPromise=(async()=>{
   try{
    const {data,error}=await supabaseClient.rpc("sincronizar_catalogo_inventario",{
@@ -743,7 +747,6 @@ async function restoreSession(){
 $("loginForm").addEventListener("submit",loginUser);
 
 makeSections();
-loadCatalog();
 restoreSession();
 </script>
 </body>
