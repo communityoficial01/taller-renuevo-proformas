@@ -399,6 +399,39 @@ function collect(){
  categories.forEach(c=>data[c.id]=getRows(c.id));
  return data;
 }
+
+let inventorySyncPromise=null;
+async function syncCatalogInventory(){
+ if(!signedInUser || !catalogLoaded || !catalog.length) return;
+ if(inventorySyncPromise) return inventorySyncPromise;
+ const inventoryItems=catalog
+  .filter(item=>item.section==="parts"||item.section==="lubricants")
+  .map(item=>({
+   code:item.code,
+   description:item.description,
+   unit:item.unit||"UNIDAD",
+   section:item.section==="parts"?"REPUESTOS Y MATERIALES":"LUBRICANTES Y MATERIALES",
+   price:Number(item.price)||0
+  }));
+ if(!inventoryItems.length) return;
+ inventorySyncPromise=(async()=>{
+  try{
+   const {data,error}=await supabaseClient.rpc("sincronizar_catalogo_inventario",{
+    p_org_id:ORGANIZATION_ID,
+    p_items:inventoryItems
+   });
+   if(error) throw error;
+   setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos. Inventario sincronizado: "+Number(data||0)+" artículos.","ok");
+  }catch(error){
+   console.error("Sincronización de inventario:",error);
+   setCatalogStatus("Catálogo disponible. No se pudo sincronizar el inventario: "+(error.message||"Error de conexión"),"error");
+  }finally{
+   inventorySyncPromise=null;
+  }
+ })();
+ return inventorySyncPromise;
+}
+
 async function saveQuote(){
  const data=collect();
  if(!data.client){alert("Ingresa el nombre del cliente antes de guardar.");$("client").focus();return}
@@ -682,6 +715,8 @@ async function loginUser(event){
   if(userError || !user) throw new Error("No se pudo validar la sesión.");
   await validateMembership(user.id);
   await newQuote();
+  await loadCatalog();
+  await syncCatalogInventory();
   await renderHistory();
  }catch(err){
   await supabaseClient.auth.signOut();
@@ -699,7 +734,7 @@ async function logoutUser(){
 async function restoreSession(){
  try{
   const {data:{session}}=await supabaseClient.auth.getSession();
-  if(session?.user){await validateMembership(session.user.id);await newQuote();await renderHistory();}
+  if(session?.user){await validateMembership(session.user.id);await newQuote();await loadCatalog();await syncCatalogInventory();await renderHistory();}
  }catch(err){
   await supabaseClient.auth.signOut();
   document.body.classList.remove("authenticated");
