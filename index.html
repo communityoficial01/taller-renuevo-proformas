@@ -443,6 +443,15 @@ async function saveQuote(){
    proformaId=created.id;
    data.number=created.proforma_number;
    $("docNumber").value=String(created.proforma_number).padStart(6,"0");
+   const actualCode="STNRM/00-"+String(created.proforma_number).padStart(6,"0");
+   if(!data.docCode || data.docCode.startsWith("STNRM/00-")){
+    $("docCode").value=actualCode;
+    const {error:numberUpdateError}=await supabaseClient.from("proformas").update({
+     service_number:String(created.proforma_number),
+     document_code:actualCode
+    }).eq("id",proformaId).eq("org_id",ORGANIZATION_ID);
+    if(numberUpdateError) throw numberUpdateError;
+   }
   }
   const items=[];
   categories.forEach(c=>data[c.id].forEach((item,index)=>items.push({
@@ -467,12 +476,18 @@ async function newQuote(){
  $("payment").value="CONTADO";$("discount").value="0";
  categories.forEach(c=>$(c.id+"Rows").innerHTML="");
  categories.forEach(c=>addLine(c.id));
+ $("docNumber").value="";
+ $("docCode").value="";
  try{
-  const {data,error}=await supabaseClient.rpc("next_proforma_number",{p_org_id:ORGANIZATION_ID});
+  const {data,error}=await supabaseClient.from("proforma_counters")
+   .select("last_number")
+   .eq("org_id",ORGANIZATION_ID)
+   .maybeSingle();
   if(error) throw error;
-  $("docNumber").value=String(data).padStart(6,"0");
-  $("docCode").value="STNRM/00-"+String(data).padStart(6,"0");
- }catch(err){$("docNumber").value="";console.error(err);alert("No se pudo obtener el siguiente número: "+err.message)}
+  const preview=(Number(data?.last_number)||0)+1;
+  $("docNumber").value=String(preview).padStart(6,"0");
+  $("docCode").value="STNRM/00-"+String(preview).padStart(6,"0");
+ }catch(err){console.error("No se pudo mostrar la numeración provisional:",err)}
  calculate();hideHistory();
 }
 async function loadQuote(id){
