@@ -422,23 +422,84 @@ function printGroup(title,rows,total){
  }
  return html+"</div>";
 }
+let pdfRequest=null;
+
+window.addEventListener("message",function(event){
+ const data=event.data;
+ if(!data||data.type!=="renuevo-template-pdf"||!pdfRequest)return;
+
+ const request=pdfRequest;
+ pdfRequest=null;
+ clearTimeout(request.timeout);
+ request.form.remove();
+ request.frame.remove();
+
+ if(!data.success){
+  request.window.close();
+  alert("No se pudo generar la proforma con el formato original de HOJA 1.\\n\\n"+(data.error||"Error desconocido."));
+  return;
+ }
+
+ try{
+  const binary=atob(data.base64||"");
+  const bytes=new Uint8Array(binary.length);
+  for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+  const pdf=new Blob([bytes],{type:"application/pdf"});
+  const url=URL.createObjectURL(pdf);
+  request.window.location.href=url;
+  setTimeout(()=>URL.revokeObjectURL(url),10*60*1000);
+ }catch(error){
+  request.window.close();
+  alert("El PDF se generó, pero no se pudo abrir: "+(error.message||error));
+ }
+});
+
 function printQuote(){
  const d=collect();
  if(!d.client){alert("Ingresa el nombre del cliente antes de imprimir.");$("client").focus();return}
- const t=totals();$("pNumber").textContent="N.º "+String(d.number).padStart(6,"0");
- $("pClient").textContent=d.client;$("pClientNumber").textContent=d.clientNumber;$("pPlate").textContent=d.plate;$("pMake").textContent=d.make;
- $("pDocCode").textContent=d.docCode;$("pModel").textContent=d.model;$("pDate").textContent=dateDMY(d.date);
- $("pKm").textContent=d.km;$("pOt").textContent=d.ot;$("pPayment").textContent=d.payment;
- $("pSections").innerHTML=printGroup("MANO DE OBRA",d.labor,t.labor)+
-  printGroup("REPUESTOS Y MATERIALES",d.parts,t.parts)+
-  printGroup("LUBRICANTES Y MATERIALES",d.lubricants,t.lubricants)+
-  printGroup("TRABAJOS TERCEROS",d.third,t.third);
- $("pObservations").textContent=d.observations;$("pSubtotal").textContent=money(t.sub);
- $("pDiscount").textContent=money(t.discount);$("pTotal").textContent=money(t.total);
- $("pWords").textContent="Son: "+numberWords(t.total)+" Bs.";
- $("pReceived").textContent=d.received||"Recibido Conforme";
- $("pName").textContent=d.received||"________________________";$("pCI").textContent=d.ci||"________________________";
- window.print();
+ if(!categories.some(c=>(d[c.id]||[]).some(row=>String(row.description||"").trim()))){
+  alert("Agrega al menos un concepto a la proforma.");
+  return;
+ }
+ if(pdfRequest){alert("Ya se está generando una proforma. Espera un momento.");return}
+
+ const pdfWindow=window.open("about:blank","_blank");
+ if(!pdfWindow){
+  alert("El navegador bloqueó la ventana del PDF. Permite las ventanas emergentes para esta página e inténtalo nuevamente.");
+  return;
+ }
+
+ const frame=document.createElement("iframe");
+ frame.name="renuevoPdfFrame_"+Date.now();
+ frame.style.display="none";
+
+ const form=document.createElement("form");
+ form.method="POST";
+ form.action=CATALOG_URL;
+ form.target=frame.name;
+ form.style.display="none";
+
+ const field=document.createElement("input");
+ field.type="hidden";
+ field.name="payload";
+ field.value=JSON.stringify(d);
+ form.appendChild(field);
+
+ document.body.appendChild(frame);
+ document.body.appendChild(form);
+
+ const timeout=setTimeout(()=>{
+  if(!pdfRequest)return;
+  const request=pdfRequest;
+  pdfRequest=null;
+  request.form.remove();
+  request.frame.remove();
+  request.window.close();
+  alert("La generación del PDF tardó demasiado. Inténtalo nuevamente.");
+ },120000);
+
+ pdfRequest={window:pdfWindow,frame,form,timeout};
+ form.submit();
 }
 function numberWords(amount){
  const u=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
