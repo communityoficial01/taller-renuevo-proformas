@@ -242,23 +242,54 @@ function normalizeSection(value){
 function setCatalogStatus(message,kind=""){
  const el=$("catalogStatus");if(el){el.textContent=message;el.className="catalog-status "+kind;}
 }
-async function loadCatalog(){
+function loadCatalog(){
  if(!CATALOG_URL){setCatalogStatus("Catálogo preparado para Google Sheets. Falta configurar la URL de Google Apps Script.");return}
  setCatalogStatus("Conectando con el catálogo de Google Sheets…");
- try{
-  const response=await fetch(CATALOG_URL,{method:"GET",cache:"no-store"});
-  if(!response.ok)throw new Error("No se pudo consultar el catálogo.");
-  const data=await response.json();
-  catalog=(Array.isArray(data)?data:(data.items||data.catalogo||[])).map(x=>({
-   code:String(x.codigo??x.code??x.CODIGO??"").trim(),
-   description:String(x.descripcion??x.description??x.DESCRIPCION??"").trim(),
-   unit:String(x.unidad??x.unit??x.UNIDAD??"").trim(),
-   section:normalizeSection(x.seccion??x.section??x.SECCION),
-   price:Number(x.precio??x.price??x.PRECIO)||0
-  })).filter(x=>x.code&&x.description&&x.unit&&x.section);
-  catalogLoaded=true;
-  setCatalogStatus(`Catálogo conectado: ${catalog.length} artículos y servicios disponibles.`,"ok");
- }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo conectar al catálogo. Revisa la URL y el acceso del servicio de Google Apps Script.","error")}
+ catalogLoaded=false;
+ const callbackName="renuevoCatalogCallback";
+ const script=document.createElement("script");
+ let terminado=false;
+ const limpiar=()=>{
+  if(terminado)return;
+  terminado=true;
+  clearTimeout(timer);
+  script.remove();
+  try{delete window[callbackName]}catch(_){window[callbackName]=undefined}
+ };
+ const timer=setTimeout(()=>{
+  limpiar();
+  catalogLoaded=false;
+  setCatalogStatus("No se pudo conectar al catálogo. La solicitud tardó demasiado; revisa que la implementación de Google Apps Script esté actualizada y sea accesible.","error");
+ },20000);
+ window[callbackName]=data=>{
+  if(terminado)return;
+  limpiar();
+  try{
+   if(data&&data.error)throw new Error(data.mensaje||"Google Apps Script devolvió un error.");
+   const items=Array.isArray(data)?data:(data.items||data.catalogo||[]);
+   if(!Array.isArray(items))throw new Error("La respuesta del catálogo no tiene el formato esperado.");
+   catalog=items.map(x=>({
+    code:String(x.codigo??x.code??x.CODIGO??"").trim(),
+    description:String(x.descripcion??x.description??x.DESCRIPCION??"").trim(),
+    unit:String(x.unidad??x.unit??x.UNIDAD??"").trim(),
+    section:normalizeSection(x.seccion??x.section??x.SECCION),
+    price:Number(x.precio??x.price??x.PRECIO)||0
+   })).filter(x=>x.code&&x.description&&x.unit&&x.section);
+   catalogLoaded=true;
+   setCatalogStatus(`Catálogo conectado: ${catalog.length} artículos y servicios disponibles.`,"ok");
+  }catch(error){
+   catalogLoaded=false;
+   setCatalogStatus("No se pudo leer el catálogo: "+(error.message||"respuesta no válida"),"error");
+  }
+ };
+ script.onerror=()=>{
+  limpiar();
+  catalogLoaded=false;
+  setCatalogStatus("No se pudo conectar al catálogo. Revisa la URL y el acceso del servicio de Google Apps Script.","error");
+ };
+ const separator=CATALOG_URL.includes("?")?"&":"?";
+ script.src=CATALOG_URL+separator+"api=catalog&callback="+callbackName+"&_="+Date.now();
+ document.head.appendChild(script);
 }
 function makeSections(){
  $("sections").innerHTML=categories.map(c=>`
