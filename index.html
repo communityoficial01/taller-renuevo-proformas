@@ -584,13 +584,8 @@ function printQuote(){
  const d=collect();
  if(!d.client){alert("Ingresa el nombre del cliente antes de generar el PDF.");$("client").focus();return}
  if(!categories.some(c=>d[c.id].length)){alert("Agrega al menos un concepto a la proforma.");return}
- const capacities={labor:3,parts:10,lubricants:6,third:3};
- for(const c of categories){
-  if(d[c.id].length>capacities[c.id]){
-   alert("La plantilla original admite hasta "+capacities[c.id]+" conceptos en "+c.title+". Actualmente hay "+d[c.id].length+".");
-   return;
-  }
- }
+ // Sin límites fijos por sección: Apps Script amplía dinámicamente
+ // las filas de la copia temporal de la plantilla original.
  if(!signedInUser){alert("Inicia sesión para generar la proforma.");return}
  const t=totals();
  d.number=val("docNumber");
