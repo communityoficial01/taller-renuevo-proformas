@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -11,131 +10,106 @@
 body{margin:0;background:var(--bg);font-family:Arial,sans-serif;color:var(--ink)}
 button,input,select,textarea{font:inherit}
 .topbar{background:var(--navy);color:white;padding:15px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand strong{display:block;font-size:17px;letter-spacing:.5px}
-.brand small{color:#c8d5e3}
+.brand strong{display:block;font-size:17px;letter-spacing:.5px}.brand small{color:#c8d5e3}
 .topbar button,.btn{border:0;border-radius:7px;padding:11px 15px;font-weight:bold;cursor:pointer}
 .topbar button,.gold{background:var(--gold);color:#19283a}
 .layout{max-width:1250px;margin:24px auto;padding:0 18px 40px}
 .heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
-.heading h1{margin:0;color:var(--navy);font-size:25px}
-.heading p{margin:6px 0 0;color:var(--muted);font-size:13px}
-.actions{display:flex;gap:8px;flex-wrap:wrap}
-.primary{background:var(--navy);color:white}
-.secondary{background:#e4ebf2;color:var(--navy)}
-.danger{background:#fce8e8;color:#a52b2b}
+.heading h1{margin:0;color:var(--navy);font-size:25px}.heading p{margin:6px 0 0;color:var(--muted);font-size:13px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.primary{background:var(--navy);color:white}.secondary{background:#e4ebf2;color:var(--navy)}.danger{background:#fce8e8;color:#a52b2b}
 .card{background:white;border:1px solid var(--line);border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 3px 12px #152c4510}
 .card h2{font-size:16px;color:var(--navy);margin:0 0 16px;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}
-.field{display:flex;flex-direction:column;gap:6px;min-width:0}
-.field label{font-size:12px;font-weight:bold;color:#586779}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}.field label{font-size:12px;font-weight:bold;color:#586779}
 .field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #ccd6e1;border-radius:7px;padding:10px;background:white;color:#263445}
-.field textarea{min-height:75px;resize:vertical}
-.span2{grid-column:span 2}
-.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.section-title h2{margin:0;border:0;padding:0}
-.table-wrap{overflow-x:auto}
-.line-table{width:100%;border-collapse:collapse;min-width:730px}
-.line-table th{background:#edf2f7;color:#43566b;font-size:11px;text-align:left;padding:9px 7px}
-.line-table td{padding:6px;border-bottom:1px solid #edf0f4}
-.line-table input{width:100%;padding:8px 6px;border:1px solid #d7dfe8;border-radius:5px;min-width:0}
-.line-table .amount{font-weight:bold;white-space:nowrap;font-size:13px}
+.field textarea{min-height:75px;resize:vertical}.span2{grid-column:span 2}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2{margin:0;border:0;padding:0}
+.table-wrap{width:100%;overflow-x:auto}
+.line-table{width:100%;min-width:730px;table-layout:fixed;border-collapse:collapse}
+.line-table th{background:#edf2f7;color:#43566b;font-size:11px;text-align:left;padding:10px 7px}
+.line-table th:nth-child(1){width:11%}
+.line-table th:nth-child(2){width:42%}
+.line-table th:nth-child(3){width:8%}
+.line-table th:nth-child(4){width:9%}
+.line-table th:nth-child(5){width:12%}
+.line-table th:nth-child(6){width:13%}
+.line-table th:nth-child(7){width:5%}
+.line-table td{padding:6px;border-bottom:1px solid #edf0f4;vertical-align:middle}
+.line-table input{width:100%;min-width:0;padding:9px 6px;border:1px solid #d7dfe8;border-radius:5px;font-size:13px}
+.line-table input.description{font-size:13px;padding:9px 7px;font-weight:500;min-width:0}
+.line-table input.qty,.line-table input.unit,.line-table input.price{padding:8px 3px;font-size:12px;text-align:center}
+.line-table .catalog-cell{min-width:0}
+.line-table .amount{font-weight:bold;white-space:nowrap;font-size:13px;text-align:right}
+.catalog-cell{position:relative;min-width:0}.suggestions{position:absolute;z-index:20;left:0;right:0;top:100%;background:white;border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 20px #142b4520;max-height:230px;overflow:auto}
+.suggestion{display:block;width:100%;border:0;background:white;text-align:left;padding:9px 10px;cursor:pointer;border-bottom:1px solid #edf0f4;color:#263445}
+.suggestion:hover{background:#edf4fa}.suggestion strong{display:block;color:var(--navy);font-size:12px}.suggestion small{display:block;color:#64748b;margin-top:3px}
+.catalog-note{font-size:11px;color:#718096;margin-top:4px}
 .summary{display:grid;grid-template-columns:1fr minmax(270px,400px);gap:20px;align-items:start}
 .summary-box{background:#f6f8fb;border:1px solid var(--line);border-radius:9px;padding:15px}
-.totalrow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}
-.totalrow strong{font-variant-numeric:tabular-nums}
+.totalrow{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}.totalrow strong{font-variant-numeric:tabular-nums}
 .totalrow input{width:110px;padding:7px;border:1px solid #ccd6e1;border-radius:5px;text-align:right}
 .totalrow.grand{border-top:1px solid #cbd5df;margin-top:7px;padding-top:13px;font-size:20px;font-weight:bold;color:var(--navy)}
-.hint{font-size:12px;color:var(--muted)}
-.hidden{display:none!important}
+.hint{font-size:12px;color:var(--muted)}.hidden{display:none!important}
 .history-item{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);flex-wrap:wrap}
-.history-item strong{color:var(--navy)}
-.history-item small{display:block;color:var(--muted);margin-top:4px}
-.history-actions{display:flex;gap:7px}
+.history-item strong{color:var(--navy)}.history-item small{display:block;color:var(--muted);margin-top:4px}.history-actions{display:flex;gap:7px}
+.catalog-status{font-size:12px;color:#64748b;margin-top:10px}.catalog-status.ok{color:#18734b}.catalog-status.error{color:#a52b2b}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.summary{grid-template-columns:1fr}}
-@media(max-width:520px){.topbar{padding:12px}.layout{padding:0 10px 30px;margin:15px auto}.heading h1{font-size:21px}.card{padding:14px}.grid{grid-template-columns:1fr}.span2{grid-column:span 1}.actions{width:100%}.actions .btn{flex:1}}
+@media(max-width:520px){.topbar{padding:12px}.layout{padding:0 10px 30px;margin:15px auto}.heading h1{font-size:21px}.card{padding:14px}.grid{grid-template-columns:1fr}.span2{grid-column:span 1}.actions{width:100%}.actions .btn{flex:1}.line-table{min-width:730px}.line-table th:nth-child(2){width:39%}.line-table .catalog-cell{min-width:0}.line-table input.description{font-size:13px}}
 #paper{display:none}
-@page{size:letter portrait;margin:10mm}
+@page{size:letter portrait;margin:9mm}
 @media print{
- body{background:white}
+ html,body{background:white!important;margin:0!important;padding:0!important}
  body *{visibility:hidden!important}
  #paper,#paper *{visibility:visible!important}
- #paper{display:block!important;position:absolute;left:0;top:0;width:100%;color:#111;font-family:Arial,sans-serif;font-size:9px}
- .print-header{display:grid;grid-template-columns:22% 53% 25%;border:1px solid #333;min-height:70px}
- .print-logo{display:flex;align-items:center;justify-content:center;border-right:1px solid #333;padding:5px;font-weight:bold;text-align:center}
- .print-title{text-align:center;display:flex;flex-direction:column;justify-content:center;line-height:1.5;padding:5px}
- .print-title strong{font-size:16px}.print-title b{font-size:14px}
- .print-number{text-align:center;border-left:1px solid #333;display:flex;flex-direction:column;justify-content:center;gap:8px;font-weight:bold;padding:5px}
- .print-number strong{font-size:15px}
- .print-client{display:grid;grid-template-columns:58% 42%;border:1px solid #333;border-top:0;padding:8px;min-height:72px;line-height:1.8}
- .print-detail{width:100%;border-collapse:collapse;margin-top:8px;font-size:8.5px}
- .print-detail th{border:1px solid #333;padding:5px 3px;text-align:center}
- .print-detail td{padding:4px;border-bottom:1px solid #bbb;vertical-align:top}
- .print-detail .section td{font-weight:bold;border-top:1px solid #333;padding-top:7px}
- .print-detail .subtotal td{font-weight:bold;border-top:1px solid #aaa}
- .print-detail .qty,.print-detail .unit,.print-detail .price,.print-detail .amount{text-align:right}
- .print-bottom{display:grid;grid-template-columns:60% 40%;gap:12px;margin-top:12px;align-items:start}
- .print-observations{border:1px solid #333;min-height:85px;padding:5px;text-align:center;font-weight:bold}
- .print-observations div{font-weight:normal;text-align:left;margin-top:10px;white-space:pre-wrap}
- .print-totals{padding:0 5px}
- .print-totals .r{display:flex;justify-content:space-between;padding:4px 0}
- .print-totals .grand{font-weight:bold;font-size:13px;border-top:1px solid #333;padding-top:7px}
- .words{text-align:center;margin:13px 0 24px;font-size:9px}
- .received{text-align:center;margin:15px auto 28px;width:55%;padding-top:24px;position:relative}
- .received:before{content:"";position:absolute;top:19px;left:10%;right:10%;border-top:1px solid #333}
- .signatures{display:grid;grid-template-columns:27% 27% 46%;align-items:end;text-align:center;margin-top:30px}
- .signline{border-top:1px solid #333;padding-top:5px;margin:0 8px}
+ #paper{display:block!important;position:absolute;left:0;top:0;width:100%;color:#111;font-family:Arial,sans-serif;font-size:8.5px}
+ .print-header{display:grid;grid-template-columns:22% 53% 25%;border:1px solid #222;min-height:68px}
+ .print-logo{display:flex;align-items:center;justify-content:center;border-right:1px solid #222;padding:5px;font-weight:bold;text-align:center;line-height:1.35;font-size:12px}
+ .print-title{text-align:center;display:flex;flex-direction:column;justify-content:center;line-height:1.45;padding:5px}
+ .print-title strong{font-size:15px}.print-title b{font-size:13px}
+ .print-number{text-align:center;border-left:1px solid #222;display:flex;flex-direction:column;justify-content:center;gap:7px;font-weight:bold;padding:5px}
+ .print-number strong{font-size:14px}
+ .print-client{display:grid;grid-template-columns:58% 42%;border:1px solid #222;border-top:0;min-height:74px}
+ .client-col{padding:7px 9px;line-height:1.8}
+ .client-col:first-child{border-right:1px solid #222}
+ .client-row{display:grid;grid-template-columns:auto 1fr;gap:4px;min-height:15px}
+ .client-row b{white-space:nowrap}
+ .print-sections{margin-top:7px;display:grid;grid-template-columns:1fr;gap:6px}
+ .print-group{border:1px solid #222;break-inside:avoid;page-break-inside:avoid}
+ .print-group-title{font-weight:bold;padding:5px 6px;border-bottom:1px solid #222;font-size:8.5px}
+ .print-detail{width:100%;border-collapse:collapse;font-size:8px}
+ .print-detail th{padding:4px 4px;text-align:center;border-bottom:1px solid #777}
+ .print-detail td{padding:3.5px 4px;vertical-align:top;border:0}
+ .print-detail .qty,.print-detail .unit,.print-detail .price,.print-detail .amount{text-align:right;white-space:nowrap}
+ .print-detail .subtotal td{font-weight:bold;border-top:1px solid #999;padding-top:4px}
+ .print-empty{padding:5px 6px;color:#555;font-style:italic}
+ .print-bottom{display:grid;grid-template-columns:60% 40%;gap:10px;margin-top:9px;align-items:start}
+ .print-observations{border:1px solid #222;min-height:72px;padding:5px;text-align:center;font-weight:bold}
+ .print-observations div{font-weight:normal;text-align:left;margin-top:8px;white-space:pre-wrap}
+ .print-totals{padding:0 5px}.print-totals .r{display:flex;justify-content:space-between;padding:3px 0}
+ .print-totals .grand{font-weight:bold;font-size:12px;border-top:1px solid #222;padding-top:6px}
+ .words{text-align:center;margin:9px 0 16px;font-size:8.5px}
+ .received{text-align:center;margin:12px auto 20px;width:55%;padding-top:20px;position:relative}
+ .received:before{content:"";position:absolute;top:15px;left:10%;right:10%;border-top:1px solid #222}
+ .signatures{display:grid;grid-template-columns:27% 27% 46%;align-items:end;text-align:center;margin-top:23px}
+ .signline{border-top:1px solid #222;padding-top:5px;margin:0 8px}
  .namefields{text-align:left;padding-left:22px;line-height:2}
 }
-
-/* Acceso seguro */
-body:not(.authenticated)>header,body:not(.authenticated)>main{display:none!important}
-.login-screen{min-height:100vh;display:none;align-items:center;justify-content:center;padding:22px;background:linear-gradient(135deg,#142b45,#1e456c)}
-body:not(.authenticated) .login-screen{display:flex}
-.login-card{width:min(420px,100%);background:#fff;border-radius:16px;padding:30px;box-shadow:0 18px 50px #07172755}
-.login-card h1{margin:0 0 8px;color:var(--navy);font-size:22px}
-.login-card p{margin:0 0 22px;color:var(--muted);font-size:13px}
-.login-card .field{margin:14px 0}
-.login-card .btn{width:100%;margin-top:8px}
-.login-error{color:#a52b2b;background:#fff0f0;border-radius:7px;padding:10px;font-size:13px;margin-top:12px}
-.login-card input{width:100%;border:1px solid #ccd6e1;border-radius:7px;padding:12px}
-.logout{background:#e4ebf2!important;color:var(--navy)!important}
-
-
-.catalog-cell{position:relative;min-width:210px}.suggestions{position:absolute;z-index:30;left:0;right:0;top:100%;background:#fff;border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 20px #142b4520;max-height:230px;overflow:auto}.suggestion{display:block;width:100%;border:0;background:#fff;text-align:left;padding:9px 10px;cursor:pointer;border-bottom:1px solid #edf0f4;color:#263445}.suggestion:hover{background:#edf4fa}.suggestion strong{display:block;color:#142b45;font-size:12px}.suggestion small{display:block;color:#64748b;margin-top:3px}.catalog-status{font-size:12px;color:#64748b;margin:10px 0}.catalog-status.ok{color:#18734b}.catalog-status.error{color:#a52b2b}
 </style>
 </head>
 <body>
-<section class="login-screen" id="loginScreen">
- <form class="login-card" id="loginForm">
-  <h1>TALLER RENUEVO TRUCKS</h1>
-  <p>Ingresa con tu usuario y contraseña para acceder al sistema de proformas.</p>
-  <div class="field"><label for="loginUsername">USUARIO</label><input id="loginUsername" autocomplete="username" required minlength="3" placeholder="Tu nombre de usuario"></div>
-  <div class="field"><label for="loginPassword">CONTRASEÑA</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
-  <button class="btn primary" id="loginButton" type="submit">Ingresar al sistema</button>
-  <div id="loginError" class="login-error hidden" role="alert"></div>
- </form>
-</section>
 <header class="topbar">
- <div class="brand">
-  <strong>TALLER RENUEVO TRUCKS</strong>
-  <small>Gestión de proformas y servicios</small>
- </div>
- <div class="actions"><button class="logout" onclick="logoutUser()">Cerrar sesión</button><button onclick="newQuote()">+ Nueva proforma</button></div>
+ <div class="brand"><strong>TALLER RENUEVO TRUCKS</strong><small>Gestión de proformas y servicios</small></div>
+ <button onclick="newQuote()">+ Nueva proforma</button>
 </header>
-
 <main class="layout">
  <div class="heading">
-  <div>
-   <h1 id="pageTitle">Nueva proforma</h1>
-   <p>Registro de servicios, repuestos, materiales y trabajos.</p>
-  </div>
+  <div><h1 id="pageTitle">Nueva proforma</h1><p>Registro de servicios, repuestos, materiales y trabajos.</p></div>
   <div class="actions">
    <button class="btn secondary" onclick="showHistory()">Historial</button>
    <button class="btn gold" onclick="printQuote()">Imprimir / PDF</button>
    <button class="btn primary" onclick="saveQuote()">Guardar</button>
   </div>
  </div>
-
  <section class="card">
   <h2>Datos del documento</h2>
   <div class="grid">
@@ -145,7 +119,6 @@ body:not(.authenticated) .login-screen{display:flex}
    <div class="field"><label>CONDICIÓN DE PAGO</label><select id="payment"><option>CONTADO</option><option>CRÉDITO</option></select></div>
   </div>
  </section>
-
  <section class="card">
   <h2>Datos del cliente y vehículo</h2>
   <div class="grid">
@@ -158,17 +131,11 @@ body:not(.authenticated) .login-screen{display:flex}
    <div class="field"><label>N.º O.T.</label><input id="ot"></div>
   </div>
  </section>
-
  <div id="sections"></div>
- <div class="catalog-status" id="catalogStatus">Preparando conexión con Google Sheets…</div>
-
  <section class="card">
   <h2>Observaciones y resumen</h2>
   <div class="summary">
-   <div class="field">
-    <label>OBSERVACIONES</label>
-    <textarea id="observations" placeholder="Observaciones del servicio..."></textarea>
-   </div>
+   <div class="field"><label>OBSERVACIONES</label><textarea id="observations" placeholder="Observaciones del servicio..."></textarea></div>
    <div class="summary-box">
     <div class="totalrow"><span>Subtotal mano de obra:</span><strong id="laborTotal">0.00</strong></div>
     <div class="totalrow"><span>Subtotal repuestos y materiales:</span><strong id="partsTotal">0.00</strong></div>
@@ -180,7 +147,6 @@ body:not(.authenticated) .login-screen{display:flex}
    </div>
   </div>
  </section>
-
  <section class="card">
   <h2>Firmas y responsables</h2>
   <div class="grid">
@@ -190,13 +156,11 @@ body:not(.authenticated) .login-screen{display:flex}
    <div class="field"><label>C.I.</label><input id="ci"></div>
   </div>
  </section>
-
  <div class="actions">
   <button class="btn secondary" onclick="newQuote()">Nueva proforma</button>
   <button class="btn gold" onclick="printQuote()">Imprimir / PDF</button>
   <button class="btn primary" onclick="saveQuote()">Guardar proforma</button>
  </div>
-
  <section class="card hidden" id="historyPanel">
   <div class="section-title"><h2>Historial de proformas</h2><button class="btn secondary" onclick="hideHistory()">Cerrar</button></div>
   <div id="historyList"></div>
@@ -210,16 +174,22 @@ body:not(.authenticated) .login-screen{display:flex}
   <div class="print-number"><strong id="pNumber"></strong><span>NO VÁLIDO PARA<br>CRÉDITO FISCAL</span></div>
  </div>
  <div class="print-client">
-  <div id="pClient"></div>
-  <div id="pVehicle"></div>
+  <div class="client-col">
+   <div class="client-row"><b>CLIENTE:</b><span id="pClient"></span></div>
+   <div class="client-row"><b>NÚMERO:</b><span id="pClientNumber"></span></div>
+   <div class="client-row"><b>PLACA:</b><span id="pPlate"></span></div>
+   <div class="client-row"><b>MARCA:</b><span id="pMake"></span></div>
+  </div>
+  <div class="client-col">
+   <div class="client-row"><b>DOCUMENTO:</b><span id="pDocCode"></span></div>
+   <div class="client-row"><b>MODELO:</b><span id="pModel"></span></div>
+   <div class="client-row"><b>FECHA:</b><span id="pDate"></span></div>
+   <div class="client-row"><b>KMS / HRS:</b><span id="pKm"></span></div>
+   <div class="client-row"><b>N.º O.T.:</b><span id="pOt"></span></div>
+   <div class="client-row"><b>CONDICIÓN:</b><span id="pPayment"></span></div>
+  </div>
  </div>
- <table class="print-detail">
-  <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN / BUSCAR EN CATÁLOGO</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th></tr></thead>
-  <tbody id="pLabor"></tbody>
-  <tbody id="pParts"></tbody>
-  <tbody id="pLubricants"></tbody>
-  <tbody id="pThird"></tbody>
- </table>
+ <div class="print-sections" id="pSections"></div>
  <div class="print-bottom">
   <div class="print-observations">OBSERVACIONES<div id="pObservations"></div></div>
   <div class="print-totals">
@@ -237,15 +207,12 @@ body:not(.authenticated) .login-screen{display:flex}
  </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const KEY="renuevo_proformas_v3";
-const APPS_SCRIPT_URL="https://script.google.com/macros/s/AKfycbwTCPkUPg91rd443gWQDOsIKKCT0iAZvZu3Fjvnl3iwj09ST6zTAvnYYKu6sw-qlVuS/exec";
-const CATALOG_URL=APPS_SCRIPT_URL+"?api=catalog";
-let pdfGenerationPending=false;
-let catalog=[],catalogLoaded=false;
+/* Cuando se publique el servicio de Google Apps Script, pegar aquí su URL /exec. */
+const CATALOG_URL="";
 let quotes=JSON.parse(localStorage.getItem(KEY)||"[]");
-let currentId=null;
+let currentId=null,catalog=[],catalogLoaded=false;
 const $=id=>document.getElementById(id);
 const categories=[
  {id:"labor",title:"MANO DE OBRA",button:"Agregar trabajo"},
@@ -258,7 +225,41 @@ const ids=["docCode","date","payment","client","clientNumber","plate","make","mo
 const money=n=>(Number(n)||0).toLocaleString("es-BO",{minimumFractionDigits:2,maximumFractionDigits:2});
 const val=id=>$(id).value.trim();
 function safe(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function nextNumber(){return "000001"}
+function nextNumber(){return String(Math.max(0,...quotes.map(q=>Number(q.number)||0))+1).padStart(6,"0")}
+function dateDMY(value){
+ if(!value)return "";
+ const parts=String(value).slice(0,10).split("-");
+ return parts.length===3?`${parts[2]}/${parts[1]}/${parts[0]}`:value;
+}
+function normalizeSection(value){
+ const s=String(value||"").toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+ if(s.includes("MANO")||s==="LABOR")return "labor";
+ if(s.includes("REPUEST")||s==="PARTS")return "parts";
+ if(s.includes("LUBRIC")||s==="LUBRICANTS")return "lubricants";
+ if(s.includes("TERCER")||s==="THIRD")return "third";
+ return "";
+}
+function setCatalogStatus(message,kind=""){
+ const el=$("catalogStatus");if(el){el.textContent=message;el.className="catalog-status "+kind;}
+}
+async function loadCatalog(){
+ if(!CATALOG_URL){setCatalogStatus("Catálogo preparado para Google Sheets. Falta configurar la URL de Google Apps Script.");return}
+ setCatalogStatus("Conectando con el catálogo de Google Sheets…");
+ try{
+  const response=await fetch(CATALOG_URL,{method:"GET",cache:"no-store"});
+  if(!response.ok)throw new Error("No se pudo consultar el catálogo.");
+  const data=await response.json();
+  catalog=(Array.isArray(data)?data:(data.items||data.catalogo||[])).map(x=>({
+   code:String(x.codigo??x.code??x.CODIGO??"").trim(),
+   description:String(x.descripcion??x.description??x.DESCRIPCION??"").trim(),
+   unit:String(x.unidad??x.unit??x.UNIDAD??"").trim(),
+   section:normalizeSection(x.seccion??x.section??x.SECCION),
+   price:Number(x.precio??x.price??x.PRECIO)||0
+  })).filter(x=>x.code&&x.description&&x.unit&&x.section);
+  catalogLoaded=true;
+  setCatalogStatus(`Catálogo conectado: ${catalog.length} artículos y servicios disponibles.`,"ok");
+ }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo conectar al catálogo. Revisa la URL y el acceso del servicio de Google Apps Script.","error")}
+}
 function makeSections(){
  $("sections").innerHTML=categories.map(c=>`
  <section class="card">
@@ -267,18 +268,23 @@ function makeSections(){
    <thead><tr><th>CÓDIGO</th><th>DESCRIPCIÓN / BUSCAR EN CATÁLOGO</th><th>CANT.</th><th>UNID.</th><th>PRECIO</th><th>TOTAL</th><th></th></tr></thead>
    <tbody id="${c.id}Rows"></tbody>
   </table></div>
- </section>`).join("");
+ </section>`).join("")+`<div class="catalog-status" id="catalogStatus"></div>`;
 }
 function addLine(type,data={}){
  const body=$(type+"Rows"),tr=document.createElement("tr");
  tr.innerHTML=`<td><input class="code" placeholder="Código"></td>
  <td class="catalog-cell"><input class="description" placeholder="Buscar por código o descripción" autocomplete="off"><div class="suggestions hidden"></div></td>
  <td><input class="qty" type="number" min="0" step="0.01" value="1"></td>
- <td><input class="unit" placeholder="Unidad"></td>
+ <td><input class="unit" placeholder="UNIDAD (catálogo)" title="Se completa automáticamente al elegir un artículo del catálogo; también puedes escribirla manualmente mientras se configura la conexión"></td>
  <td><input class="price" type="number" min="0" step="0.01" value="0"></td>
- <td class="amount">0.00</td><td><button type="button" class="btn danger" style="padding:6px 9px">×</button></td>`;
- fields.forEach((c,i)=>{const el=tr.querySelector("."+c);el.value=data[c]??(i===2?1:i===4?0:"");if(c==="qty"||c==="price")el.addEventListener("input",calculate)});
- const code=tr.querySelector(".code"),desc=tr.querySelector(".description");
+ <td class="amount">0.00</td>
+ <td><button type="button" class="btn danger" style="padding:6px 9px">×</button></td>`;
+ fields.forEach((c,i)=>{
+  const el=tr.querySelector("."+c);
+  el.value=data[c]??(i===2?1:i===4?0:"");
+  if(c==="qty"||c==="price")el.addEventListener("input",calculate);
+ });
+ const code=tr.querySelector(".code"),desc=tr.querySelector(".description"),suggest=tr.querySelector(".suggestions");
  code.addEventListener("input",()=>showSuggestions(type,tr,code.value));
  desc.addEventListener("input",()=>showSuggestions(type,tr,desc.value));
  code.addEventListener("focus",()=>{if(code.value)showSuggestions(type,tr,code.value)});
@@ -286,463 +292,133 @@ function addLine(type,data={}){
  tr.querySelector("button").onclick=()=>{tr.remove();calculate()};
  body.appendChild(tr);calculate();
 }
-function normalizeSection(value){
- const s=String(value??"").trim().toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
- if(s.includes("MANO")||s==="LABOR")return "labor";
- if(s.includes("REPUEST")||s==="PARTS")return "parts";
- if(s.includes("LUBRIC")||s==="LUBRICANTS")return "lubricants";
- if(s.includes("TERCER")||s==="THIRD")return "third";
- return "";
-}
-function setCatalogStatus(message,kind=""){const el=$("catalogStatus");if(el){el.textContent=message;el.className="catalog-status "+kind}}
-function requestCatalogJsonp(){
- return new Promise((resolve,reject)=>{
-  const callbackName="renuevoCatalogCallback";
-  const previous=window[callbackName];
-  const script=document.createElement("script");
-  let finished=false;
-  const cleanup=()=>{
-   if(finished)return;
-   finished=true;
-   delete window[callbackName];
-   if(previous)window[callbackName]=previous;
-   if(script.parentNode)script.parentNode.removeChild(script);
-   clearTimeout(timer);
-  };
-  const timer=setTimeout(()=>{cleanup();reject(new Error("Tiempo de espera agotado al consultar Apps Script"))},15000);
-  window[callbackName]=(data)=>{cleanup();resolve(data)};
-  script.onerror=()=>{cleanup();reject(new Error("No se pudo cargar la respuesta JSONP de Apps Script"))};
-  script.src=CATALOG_URL+"&callback="+callbackName+"&_="+Date.now();
-  document.head.appendChild(script);
- });
-}
-async function loadCatalog(){
- setCatalogStatus("Conectando con el catálogo de Google Sheets…");
- try{
-  const data=await requestCatalogJsonp();
-  let rows=Array.isArray(data)?data:(data&&typeof data==="object"?(data.items||data.articulos||data.catalogo||data.data||data.rows||data.result||data.products||[]):[]);
-  if(typeof rows==="string"){try{rows=JSON.parse(rows)}catch(_){rows=[]}}
-  if(!Array.isArray(rows))rows=[];
-  const mapped=rows.map(x=>{
-   x=x||{};
-   const sectionValue=x.seccion??x.section??x.SECCION??x.sección??x.categoria??x.category??x.tipo??"";
-   return {
-    code:String(x.codigo??x.code??x.CODIGO??x.codigo_articulo??x.id??"").trim(),
-    description:String(x.descripcion??x.description??x.DESCRIPCION??x.nombre??x.name??"").trim(),
-    unit:String(x.unidad??x.unit??x.UNIDAD??x.unidad_medida??"").trim(),
-    section:normalizeSection(sectionValue),
-    price:Number(x.precio??x.price??x.PRECIO??x.costo??0)||0,
-    rawSection:String(sectionValue??"")
-   };
-  });
-  catalog=mapped.filter(x=>x.code&&x.description&&x.section);
-  catalogLoaded=catalog.length>0;
-  if(catalogLoaded){
-   setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos disponibles.","ok");
-  }else{
-   const sample=mapped[0];
-   const detail=Array.isArray(data)?"respuesta tipo lista ("+data.length+" filas)":(data===null?"respuesta vacía":"respuesta tipo "+typeof data);
-   setCatalogStatus("Apps Script respondió, pero no se pudieron validar los artículos. "+detail+(sample?"; campos: "+Object.keys(rows[0]||{}).join(", ")+"; sección recibida: "+(sample.rawSection||"(vacía)"):""),"error");
-   console.warn("Diagnóstico catálogo:",{data,rows,mapped});
-  }
- }catch(error){catalogLoaded=false;setCatalogStatus("No se pudo leer el catálogo: "+(error.message||"Error JSONP"),"error");console.error("Catálogo:",error)}
-}
 function showSuggestions(type,tr,query){
  const box=tr.querySelector(".suggestions"),q=String(query||"").trim().toLowerCase();
  if(!q||!catalogLoaded){box.classList.add("hidden");box.innerHTML="";return}
  const matches=catalog.filter(item=>item.section===type&&(item.code.toLowerCase().includes(q)||item.description.toLowerCase().includes(q))).slice(0,12);
  if(!matches.length){box.innerHTML="<div class='suggestion'>Sin coincidencias en esta sección</div>";box.classList.remove("hidden");return}
- box.innerHTML=matches.map(item=>"<button type='button' class='suggestion'><strong>"+safe(item.code)+" · "+safe(item.description)+"</strong><small>Unidad: "+safe(item.unit)+(item.price?" · Precio sugerido: Bs "+money(item.price):"")+"</small></button>").join("");
- [...box.querySelectorAll("button")].forEach((button,i)=>button.addEventListener("click",()=>selectCatalogItem(tr,matches[i])));
+ box.innerHTML=matches.map((item,i)=>`<button type="button" class="suggestion" data-index="${i}"><strong>${safe(item.code)} · ${safe(item.description)}</strong><small>Unidad: ${safe(item.unit)}${item.price?" · Precio sugerido: Bs "+money(item.price):""}</small></button>`).join("");
+ box.querySelectorAll("button").forEach((button,i)=>button.addEventListener("click",()=>selectCatalogItem(tr,matches[i])));
  box.classList.remove("hidden");
 }
 function selectCatalogItem(tr,item){
- tr.querySelector(".code").value=item.code;tr.querySelector(".description").value=item.description;
- tr.querySelector(".unit").value=item.unit;if(item.price>0)tr.querySelector(".price").value=item.price;
- tr.querySelector(".suggestions").classList.add("hidden");calculate();
+ tr.querySelector(".code").value=item.code;
+ tr.querySelector(".description").value=item.description;
+ tr.querySelector(".unit").value=item.unit;
+ if(item.price>0)tr.querySelector(".price").value=item.price;
+ tr.querySelector(".suggestions").classList.add("hidden");
+ calculate();
 }
-document.addEventListener("click",e=>{document.querySelectorAll(".suggestions:not(.hidden)").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.add("hidden")})});
+document.addEventListener("click",e=>{
+ document.querySelectorAll(".suggestions:not(.hidden)").forEach(box=>{if(!box.parentElement.contains(e.target))box.classList.add("hidden")});
+});
 function getRows(type){
  return [...$(type+"Rows").querySelectorAll("tr")].map(tr=>{
   const get=c=>tr.querySelector("."+c).value;
-  return {code:get("code").trim(),description:get("description").trim(),qty:Number(get("qty"))||0,unit:get("unit").trim(),price:Number(get("price"))||0};
- }).filter(row=>row.code||row.description||row.unit||row.price>0);
+  return {code:get("code"),description:get("description"),qty:Number(get("qty"))||0,unit:get("unit"),price:Number(get("price"))||0};
+ });
 }
 function sumRows(rows){return rows.reduce((s,r)=>s+r.qty*r.price,0)}
 function totals(){
- const result={};
- categories.forEach(c=>result[c.id]=sumRows(getRows(c.id)));
+ const result={};categories.forEach(c=>result[c.id]=sumRows(getRows(c.id)));
  result.sub=categories.reduce((s,c)=>s+result[c.id],0);
  result.discount=Math.max(0,Number(val("discount"))||0);
- result.total=Math.max(0,result.sub-result.discount);
- return result;
+ result.total=Math.max(0,result.sub-result.discount);return result;
 }
 function calculate(){
- categories.forEach(c=>{
-  $(c.id+"Rows").querySelectorAll("tr").forEach(tr=>{
-   const qty=Number(tr.querySelector(".qty").value)||0;
-   const price=Number(tr.querySelector(".price").value)||0;
-   tr.querySelector(".amount").textContent=money(qty*price);
-  });
- });
+ categories.forEach(c=>$(c.id+"Rows").querySelectorAll("tr").forEach(tr=>{
+  const qty=Number(tr.querySelector(".qty").value)||0,price=Number(tr.querySelector(".price").value)||0;
+  tr.querySelector(".amount").textContent=money(qty*price);
+ }));
  const t=totals();
- $("laborTotal").textContent=money(t.labor);
- $("partsTotal").textContent=money(t.parts);
- $("lubricantsTotal").textContent=money(t.lubricants);
- $("thirdTotal").textContent=money(t.third);
- $("subtotal").textContent=money(t.sub);
- $("grandTotal").textContent=money(t.total)+" Bs";
+ $("laborTotal").textContent=money(t.labor);$("partsTotal").textContent=money(t.parts);
+ $("lubricantsTotal").textContent=money(t.lubricants);$("thirdTotal").textContent=money(t.third);
+ $("subtotal").textContent=money(t.sub);$("grandTotal").textContent=money(t.total)+" Bs";
 }
 function collect(){
  const data={number:Number(val("docNumber"))||Number(nextNumber())};
- ids.forEach(id=>data[id]=val(id));
- categories.forEach(c=>data[c.id]=getRows(c.id));
- return data;
+ ids.forEach(id=>data[id]=val(id));categories.forEach(c=>data[c.id]=getRows(c.id));return data;
 }
-
-let inventorySyncPromise=null;
-async function syncCatalogInventory(){
- if(!signedInUser || !catalogLoaded || !catalog.length) return;
- if(inventorySyncPromise) return inventorySyncPromise;
- const inventoryItems=catalog
-  .filter(item=>item.section==="parts"||item.section==="lubricants")
-  .map(item=>({
-   code:item.code,
-   description:item.description,
-   unit:item.unit||"UNIDAD",
-   section:item.section==="parts"?"REPUESTOS Y MATERIALES":"LUBRICANTES Y MATERIALES",
-   price:Number(item.price)||0
-  }));
- if(!inventoryItems.length){
-  const sectionCounts=catalog.reduce((acc,item)=>{acc[item.section]=(acc[item.section]||0)+1;return acc;},{});
-  setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos, pero ninguno está clasificado como repuesto o lubricante. Secciones detectadas: "+JSON.stringify(sectionCounts),"error");
-  return;
- }
- inventorySyncPromise=(async()=>{
-  try{
-   const {data,error}=await supabaseClient.rpc("sincronizar_catalogo_inventario",{
-    p_org_id:ORGANIZATION_ID,
-    p_items:inventoryItems
-   });
-   if(error) throw error;
-   setCatalogStatus("Catálogo conectado: "+catalog.length+" artículos. Inventario sincronizado: "+Number(data||0)+" artículos.","ok");
-  }catch(error){
-   console.error("Sincronización de inventario:",error);
-   setCatalogStatus("Catálogo disponible. No se pudo sincronizar el inventario: "+(error.message||"Error de conexión"),"error");
-  }finally{
-   inventorySyncPromise=null;
-  }
- })();
- return inventorySyncPromise;
-}
-
-async function saveQuote(){
+function saveQuote(){
  const data=collect();
  if(!data.client){alert("Ingresa el nombre del cliente antes de guardar.");$("client").focus();return}
  if(!categories.some(c=>data[c.id].length)){alert("Agrega al menos un concepto a la proforma.");return}
- try{
-  const t=totals();
-  const row={
-   org_id:ORGANIZATION_ID,proforma_number:Number(data.number)||null,
-   issue_date:data.date||new Date().toISOString().slice(0,10),
-   status:"borrador",currency:"BOB",subtotal:t.sub,discount:t.discount,total:t.total,
-   observations:data.observations||null,created_by:signedInUser.id,
-   service_number:data.number, payment_condition:data.payment,
-   client_name:data.client,client_phone:data.clientNumber||null,
-   document_code:data.docCode||null,vehicle_plate:data.plate||null,
-   vehicle_brand:data.make||null,vehicle_model:data.model||null,
-   vehicle_km:Number(data.km)||null,prepared_by_name:data.prepared||null,
-   approved_by_name:data.authorized||null,received_by_name:data.received||null,
-   received_identity_number:data.ci||null
-  };
-  let proformaId=currentId;
-  if(currentId){
-   const {data:old,error:oldError}=await supabaseClient.from("proformas").select("*").eq("id",currentId).eq("org_id",ORGANIZATION_ID).single();
-   if(oldError) throw oldError;
-   const {data:oldItems,error:itemsError}=await supabaseClient.from("proforma_items").select("*").eq("proforma_id",currentId);
-   if(itemsError) throw itemsError;
-   const {data:versions,error:versionsError}=await supabaseClient.from("proforma_versions").select("version_number").eq("proforma_id",currentId).order("version_number",{ascending:false}).limit(1);
-   if(versionsError) throw versionsError;
-   const snapshot={proforma:old,items:oldItems||[]};
-   const {error:versionError}=await supabaseClient.from("proforma_versions").insert({
-    org_id:ORGANIZATION_ID,proforma_id:currentId,
-    version_number:(versions?.[0]?.version_number||0)+1,snapshot,created_by:signedInUser.id
-   });
-   if(versionError) throw versionError;
-   const {error:updateError}=await supabaseClient.from("proformas").update(row).eq("id",currentId).eq("org_id",ORGANIZATION_ID);
-   if(updateError) throw updateError;
-   const {error:deleteError}=await supabaseClient.from("proforma_items").delete().eq("proforma_id",currentId);
-   if(deleteError) throw deleteError;
-  }else{
-   delete row.proforma_number;
-   const {data:created,error:createError}=await supabaseClient.from("proformas").insert(row).select("id,proforma_number").single();
-   if(createError) throw createError;
-   proformaId=created.id;
-   data.number=created.proforma_number;
-   $("docNumber").value=String(created.proforma_number).padStart(6,"0");
-   const actualCode="STNRM/00-"+String(created.proforma_number).padStart(6,"0");
-   if(!data.docCode || data.docCode.startsWith("STNRM/00-")){
-    $("docCode").value=actualCode;
-    const {error:numberUpdateError}=await supabaseClient.from("proformas").update({
-     service_number:String(created.proforma_number),
-     document_code:actualCode
-    }).eq("id",proformaId).eq("org_id",ORGANIZATION_ID);
-    if(numberUpdateError) throw numberUpdateError;
-   }
-  }
-  const items=[];
-  categories.forEach(c=>data[c.id].forEach((item,index)=>items.push({
-   org_id:ORGANIZATION_ID,proforma_id:proformaId,section:c.id,
-   code:item.code||null,description:item.description||"",quantity:item.qty,
-   unit:item.unit||null,unit_price:item.price,line_total:item.qty*item.price,position:index
-  })));
-  if(items.length){
-   const {error:itemError}=await supabaseClient.from("proforma_items").insert(items);
-   if(itemError) throw itemError;
-  }
-  currentId=proformaId;
-  $("pageTitle").textContent="Proforma "+String(data.number).padStart(6,"0");
-  alert("Proforma guardada correctamente en la nube.");
-  await renderHistory();
- }catch(err){console.error(err);alert("No se pudo guardar la proforma: "+(err.message||"Error de conexión"))}
+ if(currentId){
+  const q=quotes.find(x=>x.id===currentId);
+  if(q){q.versions=q.versions||[];q.versions.push({savedAt:new Date().toISOString(),data:JSON.parse(JSON.stringify(q.data))});q.data=data;q.updatedAt=new Date().toISOString();}
+ }else{
+  const id=(crypto.randomUUID?crypto.randomUUID():String(Date.now()));
+  quotes.push({id,number:data.number,data,versions:[],createdAt:new Date().toISOString()});currentId=id;
+ }
+ localStorage.setItem(KEY,JSON.stringify(quotes));$("pageTitle").textContent="Proforma "+String(data.number).padStart(6,"0");
+ alert("Proforma guardada en este navegador.");renderHistory();
 }
-async function newQuote(){
- currentId=null;$("pageTitle").textContent="Nueva proforma";
- $("docCode").value="";$("date").value=new Date().toISOString().slice(0,10);
+function newQuote(){
+ currentId=null;$("pageTitle").textContent="Nueva proforma";$("docNumber").value=nextNumber();
+ $("docCode").value="STNRM/00-"+nextNumber();$("date").value=new Date().toISOString().slice(0,10);
  ids.filter(id=>!["docCode","date","payment","discount"].includes(id)).forEach(id=>$(id).value="");
  $("payment").value="CONTADO";$("discount").value="0";
- categories.forEach(c=>$(c.id+"Rows").innerHTML="");
- categories.forEach(c=>addLine(c.id));
- $("docNumber").value="";
- $("docCode").value="";
- try{
-  const {data,error}=await supabaseClient.from("proforma_counters")
-   .select("last_number")
-   .eq("org_id",ORGANIZATION_ID)
-   .maybeSingle();
-  if(error) throw error;
-  const preview=(Number(data?.last_number)||0)+1;
-  $("docNumber").value=String(preview).padStart(6,"0");
-  $("docCode").value="STNRM/00-"+String(preview).padStart(6,"0");
- }catch(err){console.error("No se pudo mostrar la numeración provisional:",err)}
- calculate();hideHistory();
+ categories.forEach(c=>$(c.id+"Rows").innerHTML="");categories.forEach(c=>addLine(c.id));calculate();hideHistory();
 }
-async function loadQuote(id){
- try{
-  const {data:q,error}=await supabaseClient.from("proformas").select("*").eq("id",id).eq("org_id",ORGANIZATION_ID).single();
-  if(error) throw error;
-  const {data:items,error:itemError}=await supabaseClient.from("proforma_items").select("*").eq("proforma_id",id).order("position");
-  if(itemError) throw itemError;
-  currentId=id;
-  const d={
-   number:q.proforma_number,docCode:q.document_code||"",date:q.issue_date||"",
-   payment:q.payment_condition||"CONTADO",client:q.client_name||"",clientNumber:q.client_phone||"",
-   plate:q.vehicle_plate||"",make:q.vehicle_brand||"",model:q.vehicle_model||"",km:q.vehicle_km||"",
-   ot:q.service_number||"",observations:q.observations||"",discount:q.discount||0,
-   prepared:q.prepared_by_name||"",authorized:q.approved_by_name||"",received:q.received_by_name||"",
-   ci:q.received_identity_number||""
-  };
-  $("pageTitle").textContent="Editar proforma "+String(d.number).padStart(6,"0");
-  $("docNumber").value=String(d.number).padStart(6,"0");
-  ids.forEach(k=>$(k).value=d[k]??"");
-  categories.forEach(c=>{
-   $(c.id+"Rows").innerHTML="";
-   (items||[]).filter(x=>x.section===c.id).forEach(x=>addLine(c.id,{code:x.code||"",description:x.description||"",qty:x.quantity,unit:x.unit||"",price:x.unit_price}));
-   if(!(items||[]).some(x=>x.section===c.id)) addLine(c.id);
-  });
-  calculate();hideHistory();window.scrollTo({top:0,behavior:"smooth"});
- }catch(err){alert("No se pudo abrir la proforma: "+err.message)}
+function loadQuote(id){
+ const q=quotes.find(x=>x.id===id);if(!q)return;currentId=id;const d=q.data;
+ $("pageTitle").textContent="Editar proforma "+String(d.number).padStart(6,"0");$("docNumber").value=String(d.number).padStart(6,"0");
+ ids.forEach(k=>$(k).value=d[k]??"");
+ categories.forEach(c=>{$(c.id+"Rows").innerHTML="";(d[c.id]||[]).forEach(row=>addLine(c.id,row));if(!(d[c.id]||[]).length)addLine(c.id)});
+ calculate();hideHistory();window.scrollTo({top:0,behavior:"smooth"});
 }
 function showHistory(){renderHistory();$("historyPanel").classList.remove("hidden");$("historyPanel").scrollIntoView({behavior:"smooth"})}
 function hideHistory(){$("historyPanel").classList.add("hidden")}
-async function renderHistory(){
- try{
-  const {data,error}=await supabaseClient.from("proformas").select("id,proforma_number,client_name,issue_date,total,updated_at").eq("org_id",ORGANIZATION_ID).order("proforma_number",{ascending:false});
-  if(error) throw error;
-  if(!data?.length){$("historyList").innerHTML="<p class='hint'>Todavía no hay proformas guardadas.</p>";return}
-  $("historyList").innerHTML=data.map(q=>`<div class="history-item"><div><strong>Proforma ${String(q.proforma_number).padStart(6,"0")} · ${safe(q.client_name)}</strong><small>${safe(q.issue_date)} · Total: Bs ${money(q.total)}</small></div><div class="history-actions"><button class="btn secondary" onclick="loadQuote('${q.id}')">Abrir</button><button class="btn danger" onclick="showVersions('${q.id}')">Versiones</button></div></div>`).join("");
- }catch(err){$("historyList").innerHTML="<p class='hint'>Error al cargar el historial: "+safe(err.message)+"</p>"}
+function renderHistory(){
+ if(!quotes.length){$("historyList").innerHTML="<p class='hint'>Todavía no hay proformas guardadas.</p>";return}
+ $("historyList").innerHTML=[...quotes].sort((a,b)=>b.number-a.number).map(q=>{
+  const t=categories.reduce((s,c)=>s+sumRows(q.data[c.id]||[]),0)-(Number(q.data.discount)||0);
+  return `<div class="history-item"><div><strong>Proforma ${String(q.number).padStart(6,"0")} · ${safe(q.data.client)}</strong><small>${safe(dateDMY(q.data.date))} · Total: Bs ${money(Math.max(0,t))} · Versiones anteriores: ${(q.versions||[]).length}</small></div><div class="history-actions"><button class="btn secondary" onclick="loadQuote('${q.id}')">Abrir</button><button class="btn danger" onclick="showVersions('${q.id}')">Versiones</button></div></div>`;
+ }).join("");
 }
-async function showVersions(id){
- try{
-  const {data,error}=await supabaseClient.from("proforma_versions").select("version_number,created_at").eq("proforma_id",id).order("version_number",{ascending:false});
-  if(error) throw error;
-  if(!data?.length){alert("Esta proforma todavía no tiene versiones anteriores.");return}
-  alert("Versiones anteriores: "+data.map(v=>"#"+v.version_number+" ("+new Date(v.created_at).toLocaleString("es-BO")+")").join("\n"));
- }catch(err){alert("No se pudieron consultar las versiones: "+err.message)}
+function showVersions(id){
+ const q=quotes.find(x=>x.id===id);if(!q)return;const vs=q.versions||[];
+ if(!vs.length){alert("Esta proforma todavía no tiene versiones anteriores.");return}
+ alert("Se han conservado "+vs.length+" versión(es) anterior(es) de esta proforma.");
 }
-function makePrintRows(title,rows,total){
- let html=`<tr class="section"><td colspan="6">${title}</td></tr>`;
- rows.forEach(r=>{
-  html+=`<tr><td>${safe(r.code)}</td><td>${safe(r.description)}</td><td class="qty">${money(r.qty)}</td><td class="unit">${safe(r.unit)}</td><td class="price">${money(r.price)}</td><td class="amount">${money(r.qty*r.price)}</td></tr>`;
- });
- html+=`<tr class="subtotal"><td colspan="5" style="text-align:right">Subtotal ${title}:</td><td class="amount">${money(total)}</td></tr>`;
- return html;
+function printGroup(title,rows,total){
+ let html=`<div class="print-group"><div class="print-group-title">${title}</div>`;
+ if(!rows.length)html+=`<div class="print-empty">Sin conceptos registrados</div>`;
+ else{
+  html+=`<table class="print-detail"><thead><tr><th style="width:13%">CÓDIGO</th><th style="width:39%">DESCRIPCIÓN</th><th style="width:10%">CANT.</th><th style="width:12%">UNID.</th><th style="width:13%">PRECIO</th><th style="width:13%">TOTAL</th></tr></thead><tbody>`;
+  rows.forEach(r=>{html+=`<tr><td>${safe(r.code)}</td><td>${safe(r.description)}</td><td class="qty">${money(r.qty)}</td><td class="unit">${safe(r.unit)}</td><td class="price">${money(r.price)}</td><td class="amount">${money(r.qty*r.price)}</td></tr>`});
+  html+=`<tr class="subtotal"><td colspan="5" style="text-align:right">Subtotal ${title}:</td><td class="amount">${money(total)}</td></tr></tbody></table>`;
+ }
+ return html+"</div>";
 }
 function printQuote(){
- if(pdfGenerationPending){alert("Ya se está generando un PDF. Espera un momento.");return}
  const d=collect();
- if(!d.client){alert("Ingresa el nombre del cliente antes de generar el PDF.");$("client").focus();return}
- if(!categories.some(c=>d[c.id].length)){alert("Agrega al menos un concepto a la proforma.");return}
- // Sin límites fijos por sección: Apps Script amplía dinámicamente
- // las filas de la copia temporal de la plantilla original.
- if(!signedInUser){alert("Inicia sesión para generar la proforma.");return}
- const t=totals();
- d.number=val("docNumber");
- d.discount=t.discount;
- d.total=t.total;
- pdfGenerationPending=true;
- setCatalogStatus("Generando PDF con la plantilla original de HOJA 1…");
- const frameName="renuevoPdfFrame_"+Date.now();
- const iframe=document.createElement("iframe");
- iframe.name=frameName;
- iframe.style.display="none";
- document.body.appendChild(iframe);
- const form=document.createElement("form");
- form.method="POST";
- form.action=APPS_SCRIPT_URL;
- form.target=frameName;
- form.style.display="none";
- const input=document.createElement("input");
- input.type="hidden";
- input.name="payload";
- input.value=JSON.stringify(d);
- form.appendChild(input);
- document.body.appendChild(form);
- let finished=false;
- const cleanup=()=>{
-  if(finished)return;
-  finished=true;
-  pdfGenerationPending=false;
-  window.removeEventListener("message",onMessage);
-  form.remove();
-  iframe.remove();
- };
- const onMessage=(event)=>{
-  if(!event.data||event.data.type!=="renuevo-template-pdf")return;
-  cleanup();
-  if(!event.data.success){
-   setCatalogStatus("No se pudo generar el PDF: "+(event.data.error||"Error desconocido"),"error");
-   alert("No se pudo generar el PDF desde HOJA 1:\n"+(event.data.error||"Error desconocido"));
-   return;
-  }
-  try{
-   const binary=atob(event.data.base64);
-   const bytes=new Uint8Array(binary.length);
-   for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
-   const blob=new Blob([bytes],{type:"application/pdf"});
-   const url=URL.createObjectURL(blob);
-   const link=document.createElement("a");
-   link.href=url;
-   link.download=event.data.filename||"PROFORMA_TALLER_RENUEVO.pdf";
-   document.body.appendChild(link);
-   link.click();
-   link.remove();
-   setTimeout(()=>URL.revokeObjectURL(url),60000);
-   setCatalogStatus("PDF generado desde la plantilla original de HOJA 1.","ok");
-  }catch(error){
-   setCatalogStatus("El PDF llegó, pero no se pudo preparar la descarga.","error");
-   alert("No se pudo abrir el PDF: "+(error.message||error));
-  }
- };
- window.addEventListener("message",onMessage);
- form.submit();
- setTimeout(()=>{
-  if(!finished){
-   cleanup();
-   setCatalogStatus("No hubo respuesta del generador. Verifica que hayas actualizado y desplegado Codigo.gs.","error");
-   alert("No recibimos respuesta de Apps Script. Comprueba que el nuevo Codigo.gs esté implementado como una nueva versión del despliegue.");
-  }
- },120000);
+ if(!d.client){alert("Ingresa el nombre del cliente antes de imprimir.");$("client").focus();return}
+ const t=totals();$("pNumber").textContent="N.º "+String(d.number).padStart(6,"0");
+ $("pClient").textContent=d.client;$("pClientNumber").textContent=d.clientNumber;$("pPlate").textContent=d.plate;$("pMake").textContent=d.make;
+ $("pDocCode").textContent=d.docCode;$("pModel").textContent=d.model;$("pDate").textContent=dateDMY(d.date);
+ $("pKm").textContent=d.km;$("pOt").textContent=d.ot;$("pPayment").textContent=d.payment;
+ $("pSections").innerHTML=printGroup("MANO DE OBRA",d.labor,t.labor)+
+  printGroup("REPUESTOS Y MATERIALES",d.parts,t.parts)+
+  printGroup("LUBRICANTES Y MATERIALES",d.lubricants,t.lubricants)+
+  printGroup("TRABAJOS TERCEROS",d.third,t.third);
+ $("pObservations").textContent=d.observations;$("pSubtotal").textContent=money(t.sub);
+ $("pDiscount").textContent=money(t.discount);$("pTotal").textContent=money(t.total);
+ $("pWords").textContent="Son: "+numberWords(t.total)+" Bs.";
+ $("pReceived").textContent=d.received||"Recibido Conforme";
+ $("pName").textContent=d.received||"________________________";$("pCI").textContent=d.ci||"________________________";
+ window.print();
 }
 function numberWords(amount){
  const u=["cero","uno","dos","tres","cuatro","cinco","seis","siete","ocho","nueve","diez","once","doce","trece","catorce","quince","dieciséis","diecisiete","dieciocho","diecinueve","veinte","veintiuno","veintidós","veintitrés","veinticuatro","veinticinco","veintiséis","veintisiete","veintiocho","veintinueve"];
  const tens=["","","","treinta","cuarenta","cincuenta","sesenta","setenta","ochenta","noventa"];
  const hundreds=["","ciento","doscientos","trescientos","cuatrocientos","quinientos","seiscientos","setecientos","ochocientos","novecientos"];
- function under(n){
-  if(n===0)return "cero";if(n===100)return "cien";
-  if(n<30)return u[n];
-  if(n<100)return tens[Math.floor(n/10)]+(n%10?" y "+u[n%10]:"");
-  return hundreds[Math.floor(n/100)]+(n%100?" "+under(n%100):"");
- }
- function words(n){
-  if(n<1000)return under(n);
-  if(n<1000000){const a=Math.floor(n/1000),b=n%1000;return (a===1?"mil":under(a)+" mil")+(b?" "+under(b):"");}
-  const a=Math.floor(n/1000000),b=n%1000000;
-  return (a===1?"un millón":words(a)+" millones")+(b?" "+words(b):"");
- }
+ function under(n){if(n===0)return "cero";if(n===100)return "cien";if(n<30)return u[n];if(n<100)return tens[Math.floor(n/10)]+(n%10?" y "+u[n%10]:"");return hundreds[Math.floor(n/100)]+(n%100?" "+under(n%100):"")}
+ function words(n){if(n<1000)return under(n);if(n<1000000){const a=Math.floor(n/1000),b=n%1000;return(a===1?"mil":under(a)+" mil")+(b?" "+under(b):"")}const a=Math.floor(n/1000000),b=n%1000000;return(a===1?"un millón":words(a)+" millones")+(b?" "+words(b):"")}
  const bol=Math.floor(amount),cent=Math.round((amount-bol)*100);
  return words(bol).replace(/\buno\b/g,"un")+" "+String(cent).padStart(2,"0")+"/100";
 }
-
-const SUPABASE_URL="https://yvltsziudtwxnmvaigaa.supabase.co";
-const SUPABASE_PUBLIC_KEY="sb_publishable_-2RYaqD7kW02Z3sM59BLvA_5vKR3c02";
-const ORGANIZATION_ID="ccedaa9a-22e0-4e22-a3a7-832cf11ca646";
-const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
-let signedInUser=null;
-async function validateMembership(userId){
- const {data,error}=await supabaseClient.from("org_memberships")
-  .select("id,role,active").eq("org_id",ORGANIZATION_ID)
-  .eq("user_id",userId).eq("active",true).maybeSingle();
- if(error) throw new Error("No se pudo verificar el acceso a la organización: "+error.message);
- if(!data) throw new Error("Este usuario no tiene acceso activo a TALLER RENUEVO TRUCKS.");
- const {data:profile,error:profileError}=await supabaseClient.from("profiles")
-  .select("active,full_name,username").eq("id",userId).maybeSingle();
- if(profileError) throw new Error("No se pudo verificar el perfil: "+profileError.message);
- if(!profile || !profile.active) throw new Error("El perfil de este usuario está inactivo.");
- signedInUser={id:userId,role:data.role,profile};
- document.body.classList.add("authenticated");
-}
-async function loginUser(event){
- event.preventDefault();
- const button=$("loginButton"),errorBox=$("loginError");
- errorBox.classList.add("hidden");button.disabled=true;button.textContent="Verificando acceso...";
- try{
-  const username=$("loginUsername").value.trim();
-  const password=$("loginPassword").value;
-  const response=await fetch(SUPABASE_URL+"/functions/v1/login-usuario",{
-   method:"POST",headers:{"Content-Type":"application/json","apikey":SUPABASE_PUBLIC_KEY},
-   body:JSON.stringify({username,password})
-  });
-  const result=await response.json();
-  if(!response.ok || !result.success || !result.session) throw new Error(result.error||"No se pudo iniciar sesión.");
-  const {error}=await supabaseClient.auth.setSession({
-   access_token:result.session.access_token,refresh_token:result.session.refresh_token
-  });
-  if(error) throw error;
-  const {data:{user},error:userError}=await supabaseClient.auth.getUser();
-  if(userError || !user) throw new Error("No se pudo validar la sesión.");
-  await validateMembership(user.id);
-  await newQuote();
-  await loadCatalog();
-  await syncCatalogInventory();
-  await renderHistory();
- }catch(err){
-  await supabaseClient.auth.signOut();
-  errorBox.textContent=err.message||"No se pudo iniciar sesión.";
-  errorBox.classList.remove("hidden");
- }finally{
-  button.disabled=false;button.textContent="Ingresar al sistema";
- }
-}
-async function logoutUser(){
- await supabaseClient.auth.signOut();
- signedInUser=null;document.body.classList.remove("authenticated");
- $("loginPassword").value="";
-}
-async function restoreSession(){
- try{
-  const {data:{session}}=await supabaseClient.auth.getSession();
-  if(session?.user){await validateMembership(session.user.id);await newQuote();await loadCatalog();await syncCatalogInventory();await renderHistory();}
- }catch(err){
-  await supabaseClient.auth.signOut();
-  document.body.classList.remove("authenticated");
- }
-}
-$("loginForm").addEventListener("submit",loginUser);
-
-makeSections();
-restoreSession();
+makeSections();newQuote();loadCatalog();
 </script>
 </body>
 </html>
