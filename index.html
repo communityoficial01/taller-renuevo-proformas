@@ -24,15 +24,23 @@ button,input,select,textarea{font:inherit}
 .field input,.field select,.field textarea{width:100%;min-width:0;border:1px solid #ccd6e1;border-radius:7px;padding:10px;background:white;color:#263445}
 .field textarea{min-height:75px;resize:vertical}.span2{grid-column:span 2}
 .section-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.section-title h2{margin:0;border:0;padding:0}
-.table-wrap{overflow-x:auto}.line-table{width:100%;border-collapse:collapse;min-width:760px;table-layout:fixed}
-.line-table th{background:#edf2f7;color:#43566b;font-size:11px;text-align:left;padding:7px 5px}
-.line-table th:nth-child(1){width:11%}.line-table th:nth-child(2){width:42%}.line-table th:nth-child(3){width:8%}.line-table th:nth-child(4){width:9%}.line-table th:nth-child(5){width:12%}.line-table th:nth-child(6){width:13%}.line-table th:nth-child(7){width:5%}
-.line-table td{padding:4px;border-bottom:1px solid #edf0f4;vertical-align:middle}
-.line-table input{width:100%;padding:6px 4px;border:1px solid #d7dfe8;border-radius:5px;min-width:0;font-size:12px}
-.line-table input.description{font-size:13px;padding:7px 6px;font-weight:500}
-.line-table input.qty,.line-table input.unit,.line-table input.price{padding:6px 3px;font-size:11px}
-.line-table .amount{font-weight:bold;white-space:nowrap;font-size:12px}
-.catalog-cell{position:relative;min-width:240px}.suggestions{position:absolute;z-index:20;left:0;right:0;top:100%;background:white;border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 20px #142b4520;max-height:230px;overflow:auto}
+.table-wrap{width:100%;overflow-x:auto}
+.line-table{width:100%;min-width:730px;table-layout:fixed;border-collapse:collapse}
+.line-table th{background:#edf2f7;color:#43566b;font-size:11px;text-align:left;padding:10px 7px}
+.line-table th:nth-child(1){width:11%}
+.line-table th:nth-child(2){width:42%}
+.line-table th:nth-child(3){width:8%}
+.line-table th:nth-child(4){width:9%}
+.line-table th:nth-child(5){width:12%}
+.line-table th:nth-child(6){width:13%}
+.line-table th:nth-child(7){width:5%}
+.line-table td{padding:6px;border-bottom:1px solid #edf0f4;vertical-align:middle}
+.line-table input{width:100%;min-width:0;padding:9px 6px;border:1px solid #d7dfe8;border-radius:5px;font-size:13px}
+.line-table input.description{font-size:13px;padding:9px 7px;font-weight:500;min-width:0}
+.line-table input.qty,.line-table input.unit,.line-table input.price{padding:8px 3px;font-size:12px;text-align:center}
+.line-table .catalog-cell{min-width:0}
+.line-table .amount{font-weight:bold;white-space:nowrap;font-size:13px;text-align:right}
+.catalog-cell{position:relative;min-width:0}.suggestions{position:absolute;z-index:20;left:0;right:0;top:100%;background:white;border:1px solid #cbd5df;border-radius:7px;box-shadow:0 8px 20px #142b4520;max-height:230px;overflow:auto}
 .suggestion{display:block;width:100%;border:0;background:white;text-align:left;padding:9px 10px;cursor:pointer;border-bottom:1px solid #edf0f4;color:#263445}
 .suggestion:hover{background:#edf4fa}.suggestion strong{display:block;color:var(--navy);font-size:12px}.suggestion small{display:block;color:#64748b;margin-top:3px}
 .catalog-note{font-size:11px;color:#718096;margin-top:4px}
@@ -46,7 +54,7 @@ button,input,select,textarea{font:inherit}
 .history-item strong{color:var(--navy)}.history-item small{display:block;color:var(--muted);margin-top:4px}.history-actions{display:flex;gap:7px}
 .catalog-status{font-size:12px;color:#64748b;margin-top:10px}.catalog-status.ok{color:#18734b}.catalog-status.error{color:#a52b2b}
 @media(max-width:800px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.summary{grid-template-columns:1fr}}
-@media(max-width:520px){.topbar{padding:12px}.layout{padding:0 10px 30px;margin:15px auto}.heading h1{font-size:21px}.card{padding:14px}.grid{grid-template-columns:1fr}.span2{grid-column:span 1}.actions{width:100%}.actions .btn{flex:1}.line-table{min-width:700px}.line-table th:nth-child(2){width:39%}.catalog-cell{min-width:250px}.line-table input.description{font-size:13px}}
+@media(max-width:520px){.topbar{padding:12px}.layout{padding:0 10px 30px;margin:15px auto}.heading h1{font-size:21px}.card{padding:14px}.grid{grid-template-columns:1fr}.span2{grid-column:span 1}.actions{width:100%}.actions .btn{flex:1}.line-table{min-width:730px}.line-table th:nth-child(2){width:39%}.line-table .catalog-cell{min-width:0}.line-table input.description{font-size:13px}}
 #paper{display:none}
 @page{size:letter portrait;margin:9mm}
 @media print{
@@ -201,8 +209,8 @@ button,input,select,textarea{font:inherit}
 
 <script>
 const KEY="renuevo_proformas_v3";
-/* Cuando se publique el servicio de Google Apps Script, pegar aquí su URL /exec. */
-const CATALOG_URL="";
+/* URL de Google Apps Script para conectar el catálogo de Google Sheets. */
+const CATALOG_URL="https://script.google.com/macros/s/AKfycbwTCPkUPg91rd443gWQDOsIKKCT0iAZvZu3Fjvnl3iwj09ST6zTAvnYYKu6sw-qlVuS/exec";
 let quotes=JSON.parse(localStorage.getItem(KEY)||"[]");
 let currentId=null,catalog=[],catalogLoaded=false;
 const $=id=>document.getElementById(id);
